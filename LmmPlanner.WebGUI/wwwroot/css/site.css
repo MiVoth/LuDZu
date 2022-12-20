@@ -1,0 +1,63 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+body{
+  font-family: NotoSans,Arial,"Arial Unicode MS",sans-serif;
+}
+h2 {
+  /* margin-left: 2em; */
+  text-transform: uppercase;
+  font-weight: bolder;
+  margin-top: .3em;
+  margin-bottom: .3em;
+}
+h2 i:before {
+  color: white;
+  padding: 5px;
+  background-color: #626262;
+}
+.treasures-block h2 {
+  color: var(--du-color--gray-600,#626262);
+}
+.treasures-block h2 i:before {
+  background-color: var(--du-color--gray-600,#626262);
+}
+.service-block h2 {
+  color: var(--du-color--amber-700,#9d5d07);
+}
+.service-block h2 i:before {
+  background-color: var(--du-color--amber-700,#9d5d07);
+}
+
+.life-block h2 {
+  color: var(--du-color--maroon-600,#942926);
+}
+.life-block h2 i:before {
+  background-color: var(--du-color--maroon-600,#942926);
+}
+.MeetingContainer h1 {
+  margin-top: 0;
+  margin-bottom: .25em;
+  font-size: 1.749690125em;
+  font-size: 2.1083766006em;
+  font-weight: 700;
+}
+.theme {
+  font-weight: bold;
+}

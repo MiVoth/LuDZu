@@ -1,0 +1,168 @@
+﻿@page "{personId:long}"
+@model DetailsModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Details zu @Model.ActivePerson.Name</h1>
+</div>
+
+<div>
+    <dl class="row">
+        <dt class="col-md-3">Name</dt>
+        <dd class="col-md-9">@Model.ActivePerson.Name</dd>
+
+        <dt class="col-md-3">UserFor</dt>
+        <dd class="col-md-9">
+            <table>
+                <tr>
+                    @for(int i = 0; i < Model.ActivePerson.UseForString.Length; i++) {
+                        <th>@i</th>
+                    }
+                </tr>
+                <tr>
+                    @for(int i = 0; i < Model.ActivePerson.UseForString.Length; i++) {
+                        <td>@Model.ActivePerson.UseForString[i]</td>
+                    }
+                </tr>
+            </table>
+        </dd>
+
+        <dt class="col-md-3">Partner</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="Model.ActivePerson.IsPartner"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Bibellesung</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsBibleReader"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Erstes Gespräch</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsFirstEnc"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Rückbesuch</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsReturnVisit"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Bibelstudium</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsBibleStudy"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Vortrag</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsStudyTalk"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Vorsitz</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsLmmChair"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Gebet</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsPrayer"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Vortrag (10 Min)</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsLmmTalk"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Besprechung Video</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsVideoPart"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Hauptraum</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.OnlyMainHall"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">Nebenraum</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.OnlySecondHall"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">VBS-Leiter</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsCongregationStudy"></bool-icon>
+        </dd>
+
+        <dt class="col-md-3">VBS-Leser</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsCongregationStudyReader"></bool-icon>
+        </dd>   
+</dl>
+<dl class="row">
+        <dt class="col-md-3">Wachtturm-Leiter</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsWtHost"></bool-icon>
+        </dd>    
+
+        <dt class="col-md-3">Wachtturm-Leser</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsWtReader"></bool-icon>
+        </dd>              
+    </dl>
+</div>
+<dl class="row">
+        <dt class="col-md-3">Vorsitz (ÖV)</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsPublicTalkChair"></bool-icon>
+        </dd>    
+
+        <dt class="col-md-3">Öffentliche Vorträge</dt>
+        <dd class="col-md-9">
+            <bool-icon is-checked="@Model.ActivePerson.IsPublicTalk"></bool-icon>
+        </dd>              
+    </dl>
+</div>
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Main</th>
+                <th>Vol</th>
+                <th>Assi</th>
+                <th>Thema</th>
+                <th>StudyNumber</th>
+                <th>...</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Assignments)
+            {
+                <tr>
+                    <td>@item.AssignDate</td>
+                    <td>@item.MainName</td>
+                    <td>@item.VolName</td>
+                    <td>@item.AssiName</td>
+                    <td>@item.Theme
+                        @if (!string.IsNullOrEmpty(item.Source))
+                        {
+                            <br><small>@item.Source</small>
+                        }
+                    </td>
+                    <td>@item.StudyNumber</td>
+                    <td>@item.TalkId</td>
+                    @* <td>@item.IsActive</td>
+                        <td>@item.Firstname @item.Lastname</td>
+                        <td>@item.LastAssignment</td>
+                        <td>
+                        <a href="#" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                        </a>
+                        </td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

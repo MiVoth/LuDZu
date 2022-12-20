@@ -1,0 +1,107 @@
+﻿@model LmmPlanner.Data.Entities.MeetingInfo
+@{
+    Layout = null;
+    bool moreClasses = Model.MoreClasses;
+    string firtColClass = moreClasses ? "col-md-6" : "col-md-9";
+    string colClass = moreClasses ? "col-md-6" : "col-md-3";
+}
+
+
+<div class="MeetingContainer" style="max-width: 190em;">
+    <h1>@Model.MeetingDate?.ToShortDateString()</h1>
+    <h2>@Model.BibleReading</h2>
+    <div class="row mb-2">
+        <div class="@firtColClass"><span class="theme">Lied @Model.SongBeginning und Gebet</span></div>
+        <div class="@colClass">@Model.PrayerBeginning</div>
+    </div>
+    <div class="row mb-2">
+        <div class="@firtColClass"><span class="theme">Einleitende Worte</span> (1.Min)</div>
+        <div class="@colClass">@Model.Chairman</div>
+    </div>
+
+    <div class="treasures-block">
+        <h2><i class="bi bi-gem"></i> Schätze aus Gottes Wort</h2>
+        @foreach (var item in Model.TreasureParts)
+        {
+            <div class="row mb-2">
+                <div class="@firtColClass">
+                    <span class="theme">
+                        @item.Theme </span> (@item.Time Min): <br>
+                    <small>@item.Source</small>
+                </div>
+                <div class="@colClass">
+                    <span>@Model.GetAssignmentToPart(item.Id).MainPerson</span>
+                    <a href="#" class="btn btn-sm btn-outline-dark" data-part-id="@item.Id">
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="service-block">
+        <h2><i class="bi bi-flower2"></i> Uns im Dienst verbessern</h2>
+        @foreach (var item in Model.ServiceParts)
+        {
+            <div class="row mb-2">
+                <div class="@firtColClass">
+                    <span class="theme">
+                        @item.Theme </span> (@item.Time Min):
+                    <small>@item.Source</small>
+                    <small>@item.TalkId</small>
+                </div>
+                <div class="@colClass">
+                    @{
+                        var prt = Model.GetAssignmentToPart(item.Id);
+                    }
+                    <span>@prt.MainPerson</span> / <span>@prt.AssistantPerson</span>
+                </div>
+                @if (moreClasses)
+                {
+                    <div class="col-md-3">...</div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="life-block">
+        <h2><i class="bi bi-life-preserver"></i> Unser Leben als Christ</h2>
+        <div class="row mb-2">
+            <div class="@firtColClass"><span class="theme">Lied @Model.SongMiddle</span></div>
+        </div>
+        @foreach (var item in Model.LifeParts)
+        {
+            <div class="row mb-2">
+                <div class="@firtColClass">
+                    <span class="theme">
+                        @item.Theme </span> (@item.Time Min):
+                    <small>@item.Source</small>
+                </div>
+                <div class="@colClass">
+                    @{
+                        var prt = Model.GetAssignmentToPart(item.Id);
+                    }
+                    <span>@prt.MainPerson</span> <span>@prt.AssistantPerson</span>
+                    <small>@item.TalkId</small>
+                </div>
+                @* <div class="col-md-3"></div> *@
+            </div>
+        }
+    </div>
+    @foreach (var item in Model.OtherParts)
+    {
+        <div class="row mb-2">
+            <div class="@firtColClass"><span class="theme">@item.Theme</span> (@item.Time Min): </div>
+            <div class="@colClass">@item.TalkId... @item.TalkMeeting @item.TalkMeetingSection</div>
+        </div>
+    }
+
+    <div class="row mb-2">
+        <div class="@firtColClass"><span class="theme">Schlussworte</span></div>
+        <div class="@colClass">@Model.Chairman</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="@firtColClass"><span class="theme">Lied @Model.SongEnd und Gebet</span></div>
+        <div class="@colClass">@Model.PrayerEnd</div>
+    </div>
+</div>

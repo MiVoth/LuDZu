@@ -1,0 +1,68 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Startseite";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Zum Plan</h1>
+    <a asp-page="/Schedule">Hier</a>
+</div>
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CongId</th>
+                <th>Aktiv</th>
+                <th>Name</th>
+                @* <th>UserFo</th> *@
+                <th>Partn.</th>
+                <th>Bib.</th>
+                <th>1.</th>
+                <th>RB</th>
+                <th>BSt.</th>
+                <th>Vrt.</th>
+                <th>Vorsitz</th>
+                <th>Gebet</th>
+                <th>1.Vortr</th>
+                <th>Video</th>
+                <th>HS</th>
+                <th>NR</th>
+                <th>Test</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Persons)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.CongregationId</td>
+                    <td>@item.IsActive</td>
+                    <td>@item.Firstname @item.Lastname</td>
+                    @* <td class="small">@item.UseForString</td> *@
+                    <td><bool-icon is-checked="item.IsPartner"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsBibleReader"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsFirstEnc"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsReturnVisit"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsBibleStudy"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsStudyTalk"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsLmmChair"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsPrayer"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsLmmTalk"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsVideoPart"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.OnlyMainHall"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.OnlySecondHall"></bool-icon></td>
+                    <td>@item.LastAssignment?.ToShortDateString()</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-page="P/Details" asp-route-personId="@item.Id">
+                            <i class="bi bi-pencil" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

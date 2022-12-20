@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LmmPlanner.Data.Entities.LmmPerson>
+@{
+    Layout = null;
+}
+
+<table id="personListing" class="table table-sm table-bordered small table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a href="#" data-sort-header="0">Name</a>
+            </th>
+            @* <th>Letzte Aufgabe</th> *@
+            <th>
+                <a href="#" data-sort-header="1">Letzte Zuteilung</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string assign = $"{item.LastAssignment:yyyyMMdd}";
+            <tr>
+                <td data-sort="@item.Name">@item.Name</td>
+                @* <td>@item.LastAssignment?.ToShortDateString()</td> *@
+                <td data-sort="@assign">
+                    <ul class="mb-0">
+                        @foreach (var persAssign in item.LastAssignments)
+                        {
+                            <li>
+                                <div>@persAssign.Date?.ToShortDateString() - @persAssign.Theme</div>
+                                <div>@persAssign.Main
+                                    @if (!string.IsNullOrWhiteSpace(persAssign.Assist))
+                                    {
+                                        <span> / @persAssign.Assist</span>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(persAssign.Volu))
+                                    {
+                                        <span>/ @persAssign.Volu</span>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    @* <table>
+                        @foreach (var persAssign in item.LastAssignments)
+                        {
+                        <tr>
+                        <td>@persAssign.Date?.ToShortDateString()</td>
+                        <td>@persAssign.Main</td>
+                        <td>@persAssign.Assist</td>
+                        <td>@persAssign.Theme</td>
+                        </tr>
+                        }
+                        </table> *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
