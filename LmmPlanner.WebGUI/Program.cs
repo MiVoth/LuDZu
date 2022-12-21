@@ -1,4 +1,5 @@
 using LmmPlanner.Data;
+using LmmPlanner.Data.Statistics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +24,7 @@ public class Program
         builder.Services.AddScoped<MyContext>();
         builder.Services.AddScoped<DataRepo>();
         builder.Services.AddScoped<ScheduleRepo>();
+        builder.Services.AddScoped<IChairStatisticsRepo, ChairStatisticsRepo>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

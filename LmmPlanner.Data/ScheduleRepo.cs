@@ -6,10 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LmmPlanner.Data
 {
-    public class ChairStatisticsRepo
-    {
-
-    }
     public class ScheduleRepo
     {
         private MyContext db;

@@ -1,8 +1,33 @@
 @page
 @model ChairModel
 @{
-    ViewData["Title"] = "Startseite";
+    ViewData["Title"] = "Übersicht Vorsitz";
 }
 
 <h1>Übersicht Vorsitz</h1>
 <hr >
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Woche</th>
+            <th>Vorsitzender</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChairOverviews)
+        {
+            <tr>
+                <td>@item.Date?.ToShortDateString()</td>
+                <td>
+                    @if(item.IsException)
+                    { 
+                        <i>@item.Chairman</i>
+                    }
+                    else {
+                        <span>@item.Chairman</span>
+                    }
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
