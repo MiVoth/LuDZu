@@ -26,8 +26,9 @@ namespace LmmPlanner.Data.Statistics
             ctx = context;
         }
 
-        public async Task<List<ChairOverview>> GetChairOverview(DateTime from, DateTime to)
+        public async Task<List<ChairOverview>> GetChairOverview2(DateTime from, DateTime to)
         {
+
             var myExc = await ctx.Exceptions.Where(d => d.Date > from && d.Date < to).ToListAsync();
             var meetings = await ctx.LmmMeetings.Where(d => d.Date > from && d.Date < to)
                 .OrderByDescending(m => m.Date)
@@ -41,8 +42,8 @@ namespace LmmPlanner.Data.Statistics
                 .ToListAsync();
             foreach (var item in myExc)
             {
-                
-                var ex = meetings.Where(d => 
+
+                var ex = meetings.Where(d =>
                 d.Date?.Week() == item.Date?.Week()
                 && d.Date?.Year == item.Date2?.Year
                 //&& d.Date?.Week() == item.Date2?.Week()
@@ -50,7 +51,103 @@ namespace LmmPlanner.Data.Statistics
                 foreach (var e in ex)
                 {
                     e.IsException = true;
-                    e.Chairman = $"{item.Desc} - ({item.Type})";
+                    string typeName = "";
+                    switch (item.Type)
+                    {
+                        case 1:
+                            typeName = "Person?";
+                            break;
+                        case 2:
+                            typeName = "Gedächtnismahl";
+                            break;
+                        case 4:
+                            typeName = "Dienstwoche?";
+                            break;
+                        default:
+                            typeName = $"Unbekannt {item.Type}";
+                            break;
+                    }
+                    e.Chairman = $"{item.Desc} - {typeName}";
+                }
+            }
+            /// Type 1 = Person?
+            // Type 2 = Gedächtnismahl
+            // Type 4 = Andere Ausnahme (Dienstwoche?) Publicmeetingday 7, Schoolday 5
+            return meetings;
+        }
+
+        public async Task<List<ChairOverview>> GetChairOverview(DateTime from, DateTime to)
+        {
+
+            var myExc = await ctx.Exceptions.Where(d => d.Date > from && d.Date < to).ToListAsync();
+
+
+            var meetings = await ctx.LmmMeetings.Where(d => d.Date > from && d.Date < to)
+                .OrderByDescending(m => m.Date)
+                .Select(s => new ChairOverview()
+                {
+                    LmmMeetingId = s.Id,
+                    Date = s.Date,
+                    ChairmanId = s.Chairman,
+                    Chairman = s.ChairmanPerson == null ? "" : s.ChairmanPerson.Firstname + " " + s.ChairmanPerson.Lastname,
+                    PrayerBeginning = s.PrayerBeginningPerson == null ? "" : s.PrayerBeginningPerson.Firstname + " " + s.PrayerBeginningPerson.Lastname,
+                    PrayerEnd = s.PrayerEndPerson == null ? "" : s.PrayerEndPerson.Firstname + " " + s.PrayerEndPerson.Lastname
+                })
+                .ToListAsync();
+            var studys = await ctx.LmmSchedules.Where(d => d.Date > from && d.Date < to)
+            .Where(d => d.TalkId >= 140 && d.TalkId < 160)
+            .Select(d => new
+            {
+                d.Id,
+                d.Date,
+                MainFirst = d.Assignments.FirstOrDefault().MainPerson.Firstname,
+                MainLast = d.Assignments.FirstOrDefault().MainPerson.Lastname,
+                VolunteerFirst = d.Assignments.FirstOrDefault().AssistantPerson.Firstname,
+                VolunteerLast = d.Assignments.FirstOrDefault().AssistantPerson.Lastname,
+            })
+            .ToListAsync();
+            foreach (var std in studys)
+            {
+                var rightMeeting = meetings.FirstOrDefault(d => d.Date == std.Date);
+                if (rightMeeting != null)
+                {
+                    rightMeeting.StudyPerson = $"{std.MainFirst} {std.MainLast}";
+                    rightMeeting.StudyReaderPerson = $"{std.VolunteerFirst} {std.VolunteerLast}";
+                }
+            }
+            // var std = ctx.LmmAssignments.Where(d => d.LmmScheduleId)
+            foreach (var item in myExc)
+            {
+
+                var ex = meetings.Where(d =>
+                d.Date?.Week() == item.Date?.Week()
+                && d.Date?.Year == item.Date2?.Year
+                //&& d.Date?.Week() == item.Date2?.Week()
+                ).ToList();
+                foreach (var e in ex)
+                {
+                    e.IsException = true;
+                    if (!string.IsNullOrEmpty(e.Chairman))
+                    {
+                        continue;
+                    }
+                    string typeName = "";
+                    switch (item.Type)
+                    {
+                        case 1:
+                            typeName = "Person?";
+                            break;
+                        case 2:
+                            typeName = "Gedächtnismahl";
+                            break;
+                        case 4:
+                            typeName = "Dienstwoche?";
+                            break;
+                        default:
+                            typeName = $"Unbekannt {item.Type}";
+                            break;
+                    }
+                    e.Chairman = $"{item.Desc} - {typeName}";
                 }
             }
             /// Type 1 = Person?

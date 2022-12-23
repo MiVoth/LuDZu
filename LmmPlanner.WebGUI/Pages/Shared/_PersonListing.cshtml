@@ -19,23 +19,43 @@
         @foreach (var item in Model)
         {
             string assign = $"{item.LastAssignment:yyyyMMdd}";
+            string assign2 = $"{item.LastAssignment:dd.MM.yy}";
+            System.Func<string, string> abc = (ex => ex == item.Name ? "text-primary" : "");
             <tr>
-                <td data-sort="@item.Name">@item.Name</td>
+                <td data-sort="@item.Name">
+                    <a class="" asp-page="/P/Details" asp-route-personId="@item.Id">
+                        @item.Name
+                    </a>
+                    <br> <small>@assign2</small>
+                </td>
                 @* <td>@item.LastAssignment?.ToShortDateString()</td> *@
-                <td data-sort="@assign">
-                    <ul class="mb-0">
+                <td data-sort="@assign" colspan="2">
+                    @* <table>
                         @foreach (var persAssign in item.LastAssignments)
                         {
-                            <li>
+                        <tr>
+                        <td>@persAssign.Date?.ToShortDateString()</td>
+                        <td>@persAssign.Theme</td>
+                        </tr>
+                        <tr>
+                        <td>@persAssign.Main</td>
+                        <td>@persAssign.Volu</td>
+                        </tr>
+                        }
+                        </table> *@
+                    <ul class="mb-0 list-unstyled">
+                        @foreach (var persAssign in item.LastAssignments.Take(5))
+                        {
+                            <li class="border-bottom">
                                 <div>@persAssign.Date?.ToShortDateString() - @persAssign.Theme</div>
-                                <div>@persAssign.Main
+                                <div><span class="@abc(persAssign.Main)">@persAssign.Main</span>
                                     @if (!string.IsNullOrWhiteSpace(persAssign.Assist))
                                     {
-                                        <span> / @persAssign.Assist</span>
+                                        <span class="@abc(persAssign.Assist)"> / @persAssign.Assist</span>
                                     }
                                     @if (!string.IsNullOrWhiteSpace(persAssign.Volu))
                                     {
-                                        <span>/ @persAssign.Volu</span>
+                                        <span class="@abc(persAssign.Volu)">/ @persAssign.Volu</span>
                                     }
                                 </div>
                             </li>

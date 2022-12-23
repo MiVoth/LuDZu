@@ -2,8 +2,8 @@
 @model ScheduleModel
 @{
     ViewData["Title"] = "Leben und Dienst Zusammenkunft";
-    string before = DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd");
-    string after = DateTime.Now.AddDays(7).ToString("yyyy-MM-dd");
+    string before = Model.ActiveDate.AddDays(-7).ToString("yyyy-MM-dd");
+    string after = Model.ActiveDate.AddDays(7).ToString("yyyy-MM-dd");
 }
 
 <p>

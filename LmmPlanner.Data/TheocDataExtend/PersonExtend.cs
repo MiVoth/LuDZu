@@ -33,6 +33,7 @@ namespace LmmPlanner.Data.TheocData
     {
         public virtual TalkInfo? TalkInfo { get; set; }
 
+        public virtual ICollection<LmmAssignment> Assignments { get; set; } = new List<LmmAssignment>();
     }
 
     public partial class TalkInfo

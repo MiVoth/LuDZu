@@ -22,22 +22,22 @@ public class ScheduleModel : PageModel
     }
 
     public MeetingInfo Meeting { get; set; } = new();
-
+    public DateTime ActiveDate { get; set; } = DateTime.Now;
     public async Task OnGet(DateTime? date)
     {
-        DateTime theDate = DateTime.Now;
+        // DateTime theDate = DateTime.Now;
         if (date != null)
         {
-            theDate = date.Value;
+            ActiveDate = date.Value;
         }
         // LmmPlanner.Data
 
-        Meeting = await scheduleRepo.GetSchedule(theDate); //.GetAllPersons();
+        Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
     }
 
-    public async Task<IActionResult> OnGetSched(long partId)
+    public async Task<IActionResult> OnGetSched(long partId, bool assist = false)
     {
-        var r = await scheduleRepo.GetPersonsToPart(partId);
+        var r = await scheduleRepo.GetPersonsToPart(partId, assist);
 
         var myViewData = new ViewDataDictionary(
             new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), 

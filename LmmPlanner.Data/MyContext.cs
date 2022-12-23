@@ -35,7 +35,9 @@ public class MyContext : TheocData.theocbase_backupContext
             .HasForeignKey(p => p.AssistantId);
 
         modelBuilder.Entity<LmmAssignment>()
-            .HasOne(p => p.LmmSchedule);
+            .HasOne(p => p.LmmSchedule)
+            .WithMany(p => p.Assignments)
+            .HasForeignKey(p => p.LmmScheduleId);
 
         modelBuilder.Entity<LmmMeeting>()
             .HasOne(p => p.ChairmanPerson)

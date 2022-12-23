@@ -55,9 +55,9 @@
                     <td><bool-icon is-checked="@item.IsVideoPart"></bool-icon></td>
                     <td><bool-icon is-checked="@item.OnlyMainHall"></bool-icon></td>
                     <td><bool-icon is-checked="@item.OnlySecondHall"></bool-icon></td>
-                    <td>@item.LastAssignment?.ToShortDateString()</td>
+                    <td>@item.LastAssignmentDb?.ToShortDateString()</td>
                     <td>
-                        <a class="btn btn-sm btn-primary" asp-page="P/Details" asp-route-personId="@item.Id">
+                        <a class="btn btn-sm btn-primary" asp-page="/P/Details" asp-route-personId="@item.Id">
                             <i class="bi bi-pencil" aria-hidden="true"></i>
                         </a>
                     </td>

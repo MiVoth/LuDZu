@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LmmPlanner.Data.Entities;
@@ -15,6 +16,15 @@ public class DataRepo
     }
     byte[] isTrue() => new byte[1] { (byte)48 };
     byte[] isFalse() => new byte[1] { (byte)49 };
+    public async Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date)
+    {
+        List<LmmPerson> persons = await GetAllPersons();
+        List<long?> personids = persons.Select(d => (long?)d.Id).ToList();
+        List<long> unavail = await ctx.Unavailables.Where(d => 
+        d.StartDate <= date && d.EndDate >= date
+        && personids.Contains(d.PersonId)).Select(d => d.PersonId ?? 0).ToListAsync();
+        return persons.Where(p => !unavail.Contains(p.Id)).ToList();
+    }
     public async Task<List<LmmPerson>> GetAllPersons()
     {
         var li = await ctx.Persons
@@ -28,7 +38,7 @@ public class DataRepo
             Lastname = p.Lastname,
             Gender = p.Gender,
             UseFor = p.Usefor,
-            LastAssignment = p.AssignmentsAsMain.OrderByDescending(d => d.Date).FirstOrDefault().Date,
+            LastAssignmentDb = p.AssignmentsAsMain.OrderByDescending(d => d.Date).FirstOrDefault().Date,
             LastAssignmentIds = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id),
 
             // LastAssignments = p.AssignmentsAsMain.OrderByDescending(d => d.Id).Take(3)

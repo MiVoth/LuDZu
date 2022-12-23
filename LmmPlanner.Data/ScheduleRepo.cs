@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LmmPlanner.Data.Entities;
@@ -67,7 +68,7 @@ namespace LmmPlanner.Data
             return schd;
         }
 
-        public async Task<FittingPersons> GetPersonsToPart(long partId)
+        public async Task<FittingPersons> GetPersonsToPart(long partId, bool assist)
         {
             TheocData.LmmSchedule sched = await db.LmmSchedules.Where(d => d.Id == partId)
             .FirstAsync();
@@ -77,11 +78,14 @@ namespace LmmPlanner.Data
                 TalkId = sched.TalkId,
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
-            var persons = await new DataRepo(db).GetAllPersons();
+            var persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date.Value);
+
+            List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
+            bool addPartner = false;
             switch (fit.PartInfo)
             {
                 case PartType.FirstTalk:
-                    fit.Persons = persons.Where(d => d.IsPublicTalk).ToList();
+                    fit.Persons = persons.Where(d => d.IsLmmTalk).ToList();
                     break;
                 case PartType.Treasures:
                     fit.Persons = persons.Where(d => d.IsTreasurePart).ToList();
@@ -91,14 +95,48 @@ namespace LmmPlanner.Data
                     break;
                 case PartType.InitialCall:
                     fit.Persons = persons.Where(d => d.IsFirstEnc).ToList();
+                    addPartner = true;
                     break;
                 case PartType.ReturnVisit:
                     fit.Persons = persons.Where(d => d.IsReturnVisit).ToList();
+                    addPartner = true;
+                    break;
+                case PartType.BibleStudy:
+                    fit.Persons = persons.Where(d => d.IsBibleStudy).ToList();
+                    addPartner = true;
+                    break;
+                case PartType.Talk:
+                    fit.Persons = persons.Where(d => d.IsLmmTalk).ToList();
+                    break;
+                case PartType.LifePart:
+                    fit.Persons = persons.Where(d => d.IsVideoPart).ToList();
+                    break;
+                case PartType.CongregationStudy:
+                    fit.Persons = persons.Where(d => d.IsCongregationStudy).ToList();
                     break;
                 default:
                     fit.Persons = persons;
                     break;
             }
+            if (assist)
+            {
+                var assign = db.LmmAssignments.Where(d => d.LmmScheduleId == sched.Id)
+                .Select(a => new { a.MainPerson.Gender }).FirstOrDefault();
+                if (assign != null)
+                {
+                    fit.Persons = fit.Persons.Where(p => p.Gender == assign.Gender).ToList();
+                }
+                if (addPartner)
+                {
+                    fit.Persons.AddRange(partner);
+                }
+            }
+            else
+            {
+
+            }
+
+            fit.Persons = fit.Persons.OrderBy(d => d.LastAssignment).ToList();
             return fit;
         }
     }

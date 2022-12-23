@@ -6,7 +6,8 @@
     document.querySelectorAll('a[data-part-id]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
-            fetch(`./Schedule?handler=sched&partId=${a.dataset.partId}`, {
+            const assist = a.dataset.partAssist == 'true' ? 'True' : 'False';
+            fetch(`?handler=sched&partId=${a.dataset.partId}&assist=${assist}`, {
                 method: 'get'
             }).then(resp => resp.text()).then(resp => {
                 const pt = document.getElementById('details-part');

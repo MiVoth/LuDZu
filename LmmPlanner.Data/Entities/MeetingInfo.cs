@@ -102,7 +102,11 @@ namespace LmmPlanner.Data.Entities
             }
             else if (id >= 110 && id < 120)
             {
-                return PartType.BibleStudy;
+                return PartType.Talk;
+            }
+            else if (id >= 120 && id < 140)
+            {
+                return PartType.LifePart;
             }
             else if (id >= 140 && id < 160)
             {
