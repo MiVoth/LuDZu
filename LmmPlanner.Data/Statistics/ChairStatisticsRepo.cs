@@ -104,6 +104,16 @@ namespace LmmPlanner.Data.Statistics
                     AssigneeId = d.Chairman
                 }).ToList();
             }
+            else if (partType == PartType.Prayer)
+            {
+                studys = meetings.Select(d => new PartOverviewSchedule
+                {
+                    Id = 0,
+                    Date = d.Date,
+                    AssigneeId = d.PrayerBeginnung,
+                    AssigneeId2 = d.PrayerEnd
+                }).ToList();
+            }
             else
             {
                 studys = await ctx.LmmSchedules.Where(d => d.Date > from && d.Date < to)
@@ -112,7 +122,7 @@ namespace LmmPlanner.Data.Statistics
                 {
                     Id = d.Id,
                     Date = d.Date,
-                    AssigneeId = d.Assignments.FirstOrDefault().AssigneeId
+                    AssigneeId = d.Assignments.FirstOrDefault() == null ? null : d.Assignments.First().AssigneeId
                 }).ToListAsync();
             }
             foreach (var item in meetings)

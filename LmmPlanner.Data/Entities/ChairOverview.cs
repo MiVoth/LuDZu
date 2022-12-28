@@ -36,6 +36,7 @@ namespace LmmPlanner.Data.Entities
         public long Id { get; set; }
         public DateTime? Date { get; set; }
         public long? AssigneeId { get; internal set; }
+        public long? AssigneeId2 { get; internal set; }
     }
 
         public class AssignmentOverview

@@ -58,6 +58,7 @@ namespace LmmPlanner.Data
             .Select(d => new MeetingAssignmentInfo
             {
                 ScheduleId = d.LmmScheduleId,
+                AssignmentId = d.Id,
                 Classnumber = d.Classnumber == null ? 0 : d.Classnumber,
                 MainPerson = d.MainPerson == null ? "" : d.MainPerson.Firstname + " " + d.MainPerson.Lastname,
                 AssistantPerson = d.AssistantPerson == null ? "" : d.AssistantPerson.Firstname + " " + d.AssistantPerson.Lastname
@@ -75,10 +76,13 @@ namespace LmmPlanner.Data
 
             FittingPersons fit = new()
             {
+                ScheduleId = partId,
+                Theme = sched.Theme,
                 TalkId = sched.TalkId,
+                Assist = assist,
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
-            var persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
+            List<LmmPerson> persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
 
             List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
             bool addPartner = false;

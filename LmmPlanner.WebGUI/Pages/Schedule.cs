@@ -36,22 +36,22 @@ public class ScheduleModel : BasePageModel
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
     }
 
-    public async Task<IActionResult> OnGetSched(long partId, bool assist = false)
+    public async Task<IActionResult> OnGetSched(long partId, long? assignmentId = null, bool assist = false)
     {
-        var r = await scheduleRepo.GetPersonsToPart(partId, assist);
+        FittingPersons r = await scheduleRepo.GetPersonsToPart(partId, assist);
+        r.AssignmentId = assignmentId;
+        // var myViewData = new ViewDataDictionary(
+        //     new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), 
+        //     new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "_PersonListing", r.Persons } };
+        // myViewData.Model = r.Persons;
 
-        var myViewData = new ViewDataDictionary(
-            new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), 
-            new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "_PersonListing", r.Persons } };
-        myViewData.Model = r.Persons;
-
-        PartialViewResult result = new PartialViewResult()
-        {
-            ViewName = "_PersonListing",
-            ViewData = myViewData,
-        };
-        return result; 
-        // return PartialView("_PersonListing", r.Persons);
+        // PartialViewResult result = new PartialViewResult()
+        // {
+        //     ViewName = "_PersonListing",
+        //     ViewData = myViewData,
+        // };
+        // return result; 
+        return PartialView("_PersonListing", r);
         // return new JsonResult(r);
     }
 }

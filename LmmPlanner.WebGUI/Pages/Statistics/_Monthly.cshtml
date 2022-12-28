@@ -27,7 +27,7 @@
                 <td>@item.Name</td>
                 @foreach (var meeting in Model.Meetings)
                 {
-                    if (meeting.Schedule.AssigneeId == item.Id)
+                    if (meeting.Schedule.AssigneeId == item.Id || meeting.Schedule.AssigneeId2 == item.Id)
                     {
                         <td class="text-success"><i class="bi bi-check-circle"></i></td>
                     }

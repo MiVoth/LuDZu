@@ -1,22 +1,46 @@
-﻿@model IEnumerable<LmmPlanner.Data.Entities.LmmPerson>
+﻿@model LmmPlanner.Data.Entities.FittingPersons
 @{
     Layout = null;
+    var pers = Model.Persons.Select(d => new { d.Name, d.Id });
+    SelectList selPers = new(pers, "Id", "Name");
 }
 
+<form method="post" id="savePartForm" asp-page="/Programs/EditSchedule" asp-route-id="@Model.ScheduleId">
+    <input asp-for="AssignmentId" type="hidden">
+    <input asp-for="ScheduleId" type="hidden">
+    <input asp-for="Assist" type="hidden">
+    <fieldset>
+        <legend>@Model.Theme</legend>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <select id="savePartAssigneeId" asp-items="@selPers" class="form-select"></select>
+            </div>
+            <div class="col-md-6">
+                <bool-icon is-checked="@Model.Assist"> Partner</bool-icon>
+            </div>
+        </div>
+        <p>
+            <button type="submit" class="btn btn-outline-success" id="btnSavePart">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                Speichern
+            </button>
+        </p>
+    </fieldset>
+</form>
+<hr />
 <table id="personListing" class="table table-sm table-bordered small table-striped table-hover">
     <thead>
         <tr>
             <th>
                 <a href="#" data-sort-header="0">Name</a>
             </th>
-            @* <th>Letzte Aufgabe</th> *@
             <th>
                 <a href="#" data-sort-header="1">Letzte Zuteilung</a>
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Persons)
         {
             string assign = $"{item.LastAssignment:yyyyMMdd}";
             string assign2 = $"{item.LastAssignment:dd.MM.yy}";
@@ -28,21 +52,7 @@
                     </a>
                     <br> <small>@assign2</small>
                 </td>
-                @* <td>@item.LastAssignment?.ToShortDateString()</td> *@
                 <td data-sort="@assign" colspan="2">
-                    @* <table>
-                        @foreach (var persAssign in item.LastAssignments)
-                        {
-                        <tr>
-                        <td>@persAssign.Date?.ToShortDateString()</td>
-                        <td>@persAssign.Theme</td>
-                        </tr>
-                        <tr>
-                        <td>@persAssign.Main</td>
-                        <td>@persAssign.Volu</td>
-                        </tr>
-                        }
-                        </table> *@
                     <ul class="mb-0 list-unstyled">
                         @foreach (var persAssign in item.LastAssignments.Take(5))
                         {
@@ -61,17 +71,6 @@
                             </li>
                         }
                     </ul>
-                    @* <table>
-                        @foreach (var persAssign in item.LastAssignments)
-                        {
-                        <tr>
-                        <td>@persAssign.Date?.ToShortDateString()</td>
-                        <td>@persAssign.Main</td>
-                        <td>@persAssign.Assist</td>
-                        <td>@persAssign.Theme</td>
-                        </tr>
-                        }
-                        </table> *@
                 </td>
             </tr>
         }

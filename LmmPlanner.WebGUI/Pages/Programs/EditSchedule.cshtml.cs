@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using LmmPlanner.Data.Statistics;
 using LmmPlanner.Data.TheocData;
@@ -34,6 +35,43 @@ namespace LmmPlanner.WebGUI.Pages.Programs
             original.Theme = ActiveSchedule.Theme;
             await _editorRepo.CommitChanges();
             return RedirectToPage("/Schedule", new { date = original.Date?.ToString("yyyy-MM-dd") });
+        }
+
+        public async Task<JsonResult> OnPostAssignee(long partId, long? assignmentId, long assigneeId, bool assist)
+        {
+            if (assignmentId == null)
+            {
+                var original = await _editorRepo.GetLmmSchedule(partId);
+                var assignments = await _editorRepo.GetLmmScheduleAssignments(partId);
+                if (assignments.Count == 0)
+                {
+                    var assignment = new LmmAssignment {
+                        AssigneeId = assigneeId,
+                        Classnumber = 1,
+                        Date = original.Date,
+                        LmmScheduleId = partId,
+                        TimeStamp = 1,
+                        Uuid = $"{Guid.NewGuid()}"
+                    };
+                }
+            }
+            else
+            {
+                var original = await _editorRepo.GetLmmAssignment(assignmentId.Value);
+                if (!assist)
+                {
+                    original.AssigneeId = assigneeId;
+                }
+                else
+                {
+                    original.VolunteerId = assigneeId;
+                }
+            }
+            bool success = await _editorRepo.CommitChanges();
+            return new JsonResult(new
+            {
+                Success = success
+            });
         }
     }
 }

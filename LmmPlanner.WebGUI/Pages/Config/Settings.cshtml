@@ -10,6 +10,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Aktion</th>
             <th>Name</th>
             <th>Wert</th>
         </tr>
@@ -18,22 +19,14 @@
         @foreach (var setting in Model.AllSettings)
         {
             <tr>
-                <td>@setting.Name</td>
-                <td>@setting.Value</td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@setting.Id" class="btn btn-primary">
-                        Bearbeiten
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
                 </td>
+                <td>@setting.Name</td>
+                <td>@setting.Value</td>
             </tr>
         }
     </tbody>
 </table>
-@* 
-@{
-    var colors = Model.AllSettings.First(d => d.Name == "mwb_colors").Value.Split(",").Where(d => d.StartsWith("#"));
-}
-@foreach (var item in colors)
-{
-    <div style="background:@item">Das ist ein Text</div>
-} *@

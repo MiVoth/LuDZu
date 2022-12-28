@@ -5,6 +5,7 @@
     string firtColClass = moreClasses ? "col-md-6" : "col-md-9";
     string colClass = moreClasses ? "col-md-6" : "col-md-3";
 }
+@using LmmPlanner.Data.Entities
 
 
 <div class="MeetingContainer" style="max-width: 190em;">
@@ -27,11 +28,19 @@
                 <div class="@firtColClass">
                     <span class="theme">
                         @item.Theme </span> (@item.Time Min): <br>
-                    <small>@item.Source</small>
+                    @if (PartTypeStatics.BibleReading.IsBetween(item.TalkId ?? 0))
+                    {
+                        <small><a href="https://wol.jw.org/de/wol/l/r10/lp-x?q=@item.Source">@item.Source</a></small>
+                    }
+                    else
+                    {
+                        <small>@item.Source</small>
+
+                    }
                 </div>
                 <div class="@colClass">
                     <span>@Model.GetAssignmentToPart(item.Id).MainPerson</span>
-                    <a href="#" class="btn btn-sm btn-outline-dark" data-part-id="@item.Id">
+                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -54,15 +63,19 @@
                         var prt = Model.GetAssignmentToPart(item.Id);
                     }
                     <span>@prt.MainPerson</span>
-                    <a href="#" class="btn btn-sm btn-outline-dark" data-part-id="@item.Id">
+                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id"
+                    data-assignment-id="@prt.AssignmentId">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
-                     / 
-                     <span>@prt.AssistantPerson</span>
-                     <a href="#" class="btn btn-sm btn-outline-secondary" data-part-id="@item.Id"
-                     data-part-assist="true">
-                        <i class="bi bi-pencil" aria-hidden="true"></i>
-                    </a>
+                    @if (!PartTypeStatics.ImproveVideo.IsBetween(item.TalkId ?? 0))
+                    {
+                        <br>
+                        <span>@prt.AssistantPerson</span>
+                        <a href="#" class="btn btn-xs btn-outline-secondary" data-part-id="@item.Id" data-part-assist="true"
+                    data-assignment-id="@prt.AssignmentId">
+                            <i class="bi bi-pencil" aria-hidden="true"></i>
+                        </a>
+                    }
                 </div>
                 @if (moreClasses)
                 {
@@ -83,21 +96,21 @@
                 <div class="@firtColClass">
                     <span class="theme">
                         @item.Theme </span> (@item.Time Min):
-                    <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id">
+                    <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id" class="btn btn-xs btn-outline-secondary">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
                     <small>@item.Source</small>
+                    <small>@item.TalkId</small>
                 </div>
                 <div class="@colClass">
                     @{
                         var prt = Model.GetAssignmentToPart(item.Id);
                     }
-                    <span>@prt.MainPerson</span> 
-                    <a href="#" class="btn btn-sm btn-outline-dark" data-part-id="@item.Id">
+                    <span>@prt.MainPerson</span>
+                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
                     <span>@prt.AssistantPerson</span>
-                    <small>@item.TalkId</small>
                 </div>
                 @* <div class="col-md-3"></div> *@
             </div>

@@ -61,3 +61,9 @@ h2 i:before {
 .theme {
   font-weight: bold;
 }
+
+.btn-xs {
+  padding: .2rem .35rem;
+  font-size: .675rem;
+  border-radius: .2rem;
+}
