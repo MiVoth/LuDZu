@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LmmPlanner.Data;
 using LmmPlanner.Data.Entities;
+using LmmPlanner.WebGUI.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LmmPlanner.WebGUI.Pages;
 
-public class ScheduleModel : PageModel
+public class ScheduleModel : BasePageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
     private readonly ScheduleRepo scheduleRepo;
@@ -52,18 +53,5 @@ public class ScheduleModel : PageModel
         return result; 
         // return PartialView("_PersonListing", r.Persons);
         // return new JsonResult(r);
-    }
-
-    [NonAction]
-    public virtual PartialViewResult PartialView(string viewName, object model)
-    {
-        ViewData.Model = model;
-
-        return new PartialViewResult()
-        {
-            ViewName = viewName,
-            ViewData = ViewData,
-            TempData = TempData
-        };
     }
 }

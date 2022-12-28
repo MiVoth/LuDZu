@@ -78,7 +78,7 @@ namespace LmmPlanner.Data
                 TalkId = sched.TalkId,
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
-            var persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date.Value);
+            var persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
 
             List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
             bool addPartner = false;
@@ -94,7 +94,7 @@ namespace LmmPlanner.Data
                     fit.Persons = persons.Where(d => d.IsBibleReader).ToList();
                     break;
                 case PartType.InitialCall:
-                    fit.Persons = persons.Where(d => d.IsFirstEnc).ToList();
+                    fit.Persons = persons.Where(d => d.IsInitialCall).ToList();
                     addPartner = true;
                     break;
                 case PartType.ReturnVisit:
@@ -121,7 +121,7 @@ namespace LmmPlanner.Data
             if (assist)
             {
                 var assign = db.LmmAssignments.Where(d => d.LmmScheduleId == sched.Id)
-                .Select(a => new { a.MainPerson.Gender }).FirstOrDefault();
+                .Select(a => new { Gender = a.MainPerson == null ? "" : a.MainPerson.Gender }).FirstOrDefault();
                 if (assign != null)
                 {
                     fit.Persons = fit.Persons.Where(p => p.Gender == assign.Gender).ToList();

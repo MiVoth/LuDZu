@@ -25,6 +25,9 @@ public class Program
         builder.Services.AddScoped<DataRepo>();
         builder.Services.AddScoped<ScheduleRepo>();
         builder.Services.AddScoped<IChairStatisticsRepo, ChairStatisticsRepo>();
+        builder.Services.AddScoped<IDataRepo, DataRepo>();
+        builder.Services.AddScoped<ISettingsRepo, SettingsRepo>();
+        builder.Services.AddScoped<IEditorRepo, EditorRepo>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

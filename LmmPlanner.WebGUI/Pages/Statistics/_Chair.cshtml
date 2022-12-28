@@ -1,0 +1,44 @@
+@model ChairModel
+@{
+    @* ViewData["Title"] = "Übersicht Vorsitz"; *@
+    Layout = null;
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Woche</th>
+            <th>Vorsitzender</th>
+            <th>VBS</th>
+            <th>Leser</th>
+            <th>Gebete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChairOverviews)
+        {
+            <tr>
+                <td>@item.Date?.ToShortDateString()</td>
+                <td>
+                    @if (item.IsException)
+                    {
+                        <i>@item.Chairman</i>
+                    }
+                    else
+                    {
+                        <span>@item.Chairman</span>
+                    }
+                </td>
+                <td>
+                    @item.StudyPerson
+                </td>
+                <td>
+                    @item.StudyReaderPerson
+                </td>
+                <td>
+                    @item.PrayerBeginning <br /> @item.PrayerEnd
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

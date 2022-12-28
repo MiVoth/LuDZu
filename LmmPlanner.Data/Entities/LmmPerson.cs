@@ -27,6 +27,38 @@ namespace LmmPlanner.Data.Entities
                 // return binary;
             }
         }
+        public bool MayTakePart(PartType type)
+        {
+            switch (type)
+            {
+                case PartType.Prayer:
+                    return IsPrayer;
+                case PartType.Chair:
+                    return IsLmmChair;
+                case PartType.FirstTalk:
+                    return IsLmmTalk;
+                case PartType.Treasures:
+                    return IsTreasurePart;
+                case PartType.BibleReading:
+                    return IsBibleReader;
+                case PartType.ImproveVideo:
+                    return IsVideoPart;
+                case PartType.InitialCall:
+                    return IsInitialCall;
+                case PartType.ReturnVisit:
+                    return IsReturnVisit;
+                case PartType.BibleStudy:
+                    return IsBibleStudy;
+                case PartType.Talk:
+                    return IsLmmTalk;
+                case PartType.LifePart:
+                    return IsVideoPart;
+                case PartType.CongregationStudy:
+                    return IsCongregationStudy;
+                default:
+                    return false;
+            }
+        }
 
         public bool IsActive { get => UseForString[27] == '0'; }
         public bool IsPublicTalkChair { get => UseForString[25] == '1'; }
@@ -42,7 +74,7 @@ namespace LmmPlanner.Data.Entities
         public bool IsLmmChair { get => UseForString[14] == '1'; }
         public bool IsTreasurePart { get => UseForString[12] == '1'; }
         public bool IsBibleReader { get => UseForString[11] == '1'; }
-        public bool IsFirstEnc { get => UseForString[9] == '1'; }
+        public bool IsInitialCall { get => UseForString[9] == '1'; }
         public bool IsReturnVisit { get => UseForString[8] == '1'; }
         public bool IsBibleStudy { get => UseForString[7] == '1'; }
         public bool IsLmmTalk { get => UseForString[6] == '1'; }
@@ -51,6 +83,8 @@ namespace LmmPlanner.Data.Entities
         public bool IsVideoPart { get => UseForString[3] == '1'; }
         public List<LmmPersonAssignment> LastAssignments { get; internal set; } = new();
         public IEnumerable<long> LastAssignmentIds { get; internal set; } = new List<long>();
+        public bool IsElder { get; internal set; }
+        public bool IsServant { get; internal set; }
     }
 
     public class LmmPersonAssignment

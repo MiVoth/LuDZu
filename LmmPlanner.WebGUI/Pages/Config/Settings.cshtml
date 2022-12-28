@@ -1,0 +1,39 @@
+@page
+@model SettingsModel
+
+@{
+    ViewData["Title"] = "Einstellungen";
+}
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Wert</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var setting in Model.AllSettings)
+        {
+            <tr>
+                <td>@setting.Name</td>
+                <td>@setting.Value</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@setting.Id" class="btn btn-primary">
+                        Bearbeiten
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@* 
+@{
+    var colors = Model.AllSettings.First(d => d.Name == "mwb_colors").Value.Split(",").Where(d => d.StartsWith("#"));
+}
+@foreach (var item in colors)
+{
+    <div style="background:@item">Das ist ein Text</div>
+} *@

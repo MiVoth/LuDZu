@@ -1,0 +1,23 @@
+@page "{id:long}"
+@model EditScheduleModel
+@{
+    ViewData["Title"] = "Bearbeiten";
+}
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form method="post">
+    <div class="mb-2">
+        <label asp-for="ActiveSchedule.Theme" class="col-form-label"></label>
+        <input asp-for="ActiveSchedule.Theme" class="form-control">
+    </div>
+    <p>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save" aria-hidden="true"></i>
+            Speichern
+        </button>
+    </p>
+</form>
+<a asp-page="/Schedule" asp-route-date="@Model.ActiveSchedule.Date" class="btn btn-secondary">
+    Zurück
+</a>

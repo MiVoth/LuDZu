@@ -83,6 +83,9 @@
                 <div class="@firtColClass">
                     <span class="theme">
                         @item.Theme </span> (@item.Time Min):
+                    <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id">
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                    </a>
                     <small>@item.Source</small>
                 </div>
                 <div class="@colClass">

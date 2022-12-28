@@ -6,7 +6,7 @@ namespace LmmPlanner.Data.TheocData
     public partial class LmmMeeting
     {
         public long Id { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public string? BibleReading { get; set; }
         public long? Chairman { get; set; }
         public long? Counselor2 { get; set; }

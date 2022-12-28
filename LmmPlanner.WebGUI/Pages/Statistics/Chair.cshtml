@@ -6,41 +6,39 @@
 
 <h1>Übersicht Vorsitz</h1>
 <hr>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Woche</th>
-            <th>Vorsitzender</th>
-            <th>VBS</th>
-            <th>Leser</th>
-            <th>Gebete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ChairOverviews)
-        {
-            <tr>
-                <td>@item.Date?.ToShortDateString()</td>
-                <td>
-                    @if (item.IsException)
-                    {
-                        <i>@item.Chairman</i>
-                    }
-                    else
-                    {
-                        <span>@item.Chairman</span>
-                    }
-                </td>
-                <td>
-                    @item.StudyPerson
-                </td>
-                <td>
-                    @item.StudyReaderPerson
-                </td>
-                <td>
-                    @item.PrayerBeginning <br /> @item.PrayerEnd
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body">
+        <div class="mb-2">
+            <label class="col-form-label"> Von:
+                <input asp-for="FromDate" class="form-control" type="date">
+            </label>
+        </div>
+        <div class="mb-2">
+            <label class="col-form-label"> Bis:
+                <input asp-for="ToDate" class="form-control" type="date">
+            </label>
+        </div>
+    </div>
+</div>
+<hr />
+<a href="#" data-complete="true" class="btn btn-outline-primary">
+    Große Übersicht
+</a>
+<a href="#" data-part-type="@LmmPlanner.Data.Entities.PartType.Chair" class="btn btn-outline-dark">
+    Vorsitz
+</a>
+<a href="#" data-part-type="@LmmPlanner.Data.Entities.PartType.Treasures" class="btn btn-outline-dark">
+    @LmmPlanner.Data.Entities.PartType.Treasures
+</a>
+<a href="#" data-part-type="@LmmPlanner.Data.Entities.PartType.Prayer" class="btn btn-outline-dark">
+    @LmmPlanner.Data.Entities.PartType.Prayer
+</a>
+<a href="#" data-part-type="@LmmPlanner.Data.Entities.PartType.FirstTalk" class="btn btn-outline-dark">
+    @LmmPlanner.Data.Entities.PartType.FirstTalk
+</a>
+<a href="#" data-part-type="@LmmPlanner.Data.Entities.PartType.CongregationStudy" class="btn btn-outline-dark">
+    @LmmPlanner.Data.Entities.PartType.CongregationStudy
+</a>
+<div id="stat-container">
+    <partial name="_Chair" model="Model" />
+</div>

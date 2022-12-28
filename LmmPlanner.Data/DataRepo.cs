@@ -6,7 +6,16 @@ using LmmPlanner.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LmmPlanner.Data;
-public class DataRepo
+
+public interface IDataRepo
+{
+    Task<List<LmmAssignmentInfo>> GetAllAssignmentsOfPerson(long personId);
+    Task<List<LmmPerson>> GetAllPersons();
+    Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date);
+    Task<LmmPerson> GetPerson(long personId);
+}
+
+public class DataRepo : IDataRepo
 {
     private MyContext ctx;
 
@@ -20,7 +29,7 @@ public class DataRepo
     {
         List<LmmPerson> persons = await GetAllPersons();
         List<long?> personids = persons.Select(d => (long?)d.Id).ToList();
-        List<long> unavail = await ctx.Unavailables.Where(d => 
+        List<long> unavail = await ctx.Unavailables.Where(d =>
         d.StartDate <= date && d.EndDate >= date
         && personids.Contains(d.PersonId)).Select(d => d.PersonId ?? 0).ToListAsync();
         return persons.Where(p => !unavail.Contains(p.Id)).ToList();
@@ -32,6 +41,8 @@ public class DataRepo
         .Select(p => new LmmPerson
         {
             Id = p.Id,
+            IsElder = p.Elder,
+            IsServant = p.Servant,
             // Active = p.Active,
             CongregationId = p.CongregationId,
             Firstname = p.Firstname,

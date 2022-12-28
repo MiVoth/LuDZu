@@ -45,7 +45,7 @@
                     @* <td class="small">@item.UseForString</td> *@
                     <td><bool-icon is-checked="item.IsPartner"></bool-icon></td>
                     <td><bool-icon is-checked="@item.IsBibleReader"></bool-icon></td>
-                    <td><bool-icon is-checked="@item.IsFirstEnc"></bool-icon></td>
+                    <td><bool-icon is-checked="@item.IsInitialCall"></bool-icon></td>
                     <td><bool-icon is-checked="@item.IsReturnVisit"></bool-icon></td>
                     <td><bool-icon is-checked="@item.IsBibleStudy"></bool-icon></td>
                     <td><bool-icon is-checked="@item.IsStudyTalk"></bool-icon></td>
@@ -57,7 +57,7 @@
                     <td><bool-icon is-checked="@item.OnlySecondHall"></bool-icon></td>
                     <td>@item.LastAssignmentDb?.ToShortDateString()</td>
                     <td>
-                        <a class="btn btn-sm btn-primary" asp-page="/P/Details" asp-route-personId="@item.Id">
+                        <a class="btn btn-sm btn-primary" asp-page="./Details" asp-route-personId="@item.Id">
                             <i class="bi bi-pencil" aria-hidden="true"></i>
                         </a>
                     </td>
