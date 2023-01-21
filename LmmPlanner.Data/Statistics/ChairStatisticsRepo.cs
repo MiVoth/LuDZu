@@ -40,12 +40,13 @@ namespace LmmPlanner.Data.Statistics
                 .ToListAsync();
 
             var studys = await ctx.LmmSchedules.Where(d => d.Date > from && d.Date < to)
-                .Where(d => d.Assignments.Any(d => personIds.Contains(d.AssigneeId)))
+                .Where(d => d.Assignments.Any(d => personIds.Contains(d.AssigneeId) || personIds.Contains(d.AssistantId)))
                 .Select(d => new AssignmentOverviewSchedule
                 {
                     Date = d.Date,
                     TalkId = d.TalkId,
-                    PersonId = d.Assignments.FirstOrDefault().AssigneeId
+                    PersonId = d.Assignments.FirstOrDefault().AssigneeId,
+                    AssistantId = d.Assignments.FirstOrDefault().AssistantId
                 }).ToListAsync();
 
             foreach (var stud in studys)

@@ -47,7 +47,7 @@
             System.Func<string, string> abc = (ex => ex == item.Name ? "text-primary" : "");
             <tr>
                 <td data-sort="@item.Name">
-                    <a class="" asp-page="/P/Details" asp-route-personId="@item.Id">
+                    <a class="" asp-page="/Programs/Details" asp-route-personId="@item.Id">
                         @item.Name
                     </a>
                     <br> <small>@assign2</small>

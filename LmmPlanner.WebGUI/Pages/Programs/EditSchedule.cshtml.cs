@@ -64,7 +64,8 @@ namespace LmmPlanner.WebGUI.Pages.Programs
                 }
                 else
                 {
-                    original.VolunteerId = assigneeId;
+                    // original.VolunteerId = assigneeId;
+                    original.AssistantId = assigneeId;
                 }
             }
             bool success = await _editorRepo.CommitChanges();

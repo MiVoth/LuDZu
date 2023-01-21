@@ -21,18 +21,32 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Persons)
+        @foreach (var person in Model.Persons)
         {
             <tr>
-                <td>@item.Name</td>
+                <td>@person.Name</td>
                 @foreach (var meeting in Model.Meetings)
                 {
-                    if (meeting.Schedules.Any(d => d.PersonId == item.Id))
+                    if (meeting.Schedules.Any(d => d.PersonId == person.Id || d.AssistantId == person.Id))
                     {
-                        <td class="text-success">
-                            @foreach (var sched in meeting.Schedules.Where(d => d.PersonId == item.Id))
+                        <td>
+                            @foreach (var sched in meeting.Schedules.Where(d => d.PersonId == person.Id || d.AssistantId == person.Id))
                             {
-                                <div>@sched.PartTypeName</div>
+                                if(sched.PersonId == person.Id) 
+                                {
+                                    if(sched.PartTypeName == "Gebet") 
+                                    {
+                                        <div class="text-info">@sched.PartTypeName</div>
+                                    } 
+                                    else 
+                                    {
+                                        <div class="text-success">@sched.PartTypeName</div>
+                                    }
+                                } 
+                                else 
+                                {
+                                    <div class="text-info">@sched.PartTypeName</div>
+                                }
                             }
                         </td>
                     }

@@ -36,6 +36,12 @@ public class ScheduleModel : BasePageModel
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
     }
 
+    public async Task<IActionResult> OnGetRefresh(DateTime date)
+    {
+        var meeting = await scheduleRepo.GetSchedule(date); //.GetAllPersons();
+        return PartialView("_Schedule", meeting);
+    }
+
     public async Task<IActionResult> OnGetSched(long partId, long? assignmentId = null, bool assist = false)
     {
         FittingPersons r = await scheduleRepo.GetPersonsToPart(partId, assist);

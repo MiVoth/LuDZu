@@ -83,7 +83,7 @@ namespace LmmPlanner.Data
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
             List<LmmPerson> persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
-
+            
             List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
             bool addPartner = false;
             switch (fit.PartInfo)
@@ -110,7 +110,7 @@ namespace LmmPlanner.Data
                     addPartner = true;
                     break;
                 case PartType.Talk:
-                    fit.Persons = persons.Where(d => d.IsLmmTalk).ToList();
+                    fit.Persons = persons.Where(d => d.IsStudyTalk).ToList();
                     break;
                 case PartType.LifePart:
                     fit.Persons = persons.Where(d => d.IsVideoPart).ToList();
@@ -122,17 +122,19 @@ namespace LmmPlanner.Data
                     fit.Persons = persons;
                     break;
             }
+            List<long> personIds = fit.Persons.Select(p => p.Id).ToList();
             if (assist)
             {
+                if (addPartner)
+                {
+                    // dont add twice
+                    fit.Persons.AddRange(partner.Where(p => !personIds.Contains(p.Id)));
+                }
                 var assign = db.LmmAssignments.Where(d => d.LmmScheduleId == sched.Id)
                 .Select(a => new { Gender = a.MainPerson == null ? "" : a.MainPerson.Gender }).FirstOrDefault();
                 if (assign != null)
                 {
                     fit.Persons = fit.Persons.Where(p => p.Gender == assign.Gender).ToList();
-                }
-                if (addPartner)
-                {
-                    fit.Persons.AddRange(partner);
                 }
             }
             else
