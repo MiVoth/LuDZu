@@ -138,7 +138,7 @@ namespace LmmPlanner.Data.Statistics
         public async Task<List<ChairOverview>> GetChairOverview(DateTime from, DateTime to)
         {
 
-            var myExc = await ctx.Exceptions.Where(d => d.Date > from && d.Date < to).ToListAsync();
+            var myExc = await ctx.Exceptions.Where(d => d.Date > from && d.Date < to && d.Active == true).ToListAsync();
 
 
             var meetings = await ctx.LmmMeetings.Where(d => d.Date > from && d.Date < to)
@@ -194,13 +194,16 @@ namespace LmmPlanner.Data.Statistics
                     switch (item.Type)
                     {
                         case 1:
-                            typeName = "Person?";
+                            typeName = "Regionaler Kongress";
                             break;
                         case 2:
                             typeName = "Gedächtnismahl";
                             break;
-                        case 4:
+                        case 0:
                             typeName = "Dienstwoche?";
+                            break;
+                        case 5:
+                            typeName = "Kreiskongress";
                             break;
                         default:
                             typeName = $"Unbekannt {item.Type}";

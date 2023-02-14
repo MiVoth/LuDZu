@@ -39,6 +39,9 @@ public class MyContext : TheocData.theocbase_backupContext
             .WithMany(p => p.Assignments)
             .HasForeignKey(p => p.LmmScheduleId);
 
+        modelBuilder.Entity<LmmAssignment>().Property(p => p.Date).HasColumnType("date");
+        modelBuilder.Entity<LmmSchedule>().Property(p => p.Date).HasColumnType("date");
+
         modelBuilder.Entity<LmmMeeting>()
             .HasOne(p => p.ChairmanPerson)
             .WithMany(p => p.AssignmentsAsChairman)

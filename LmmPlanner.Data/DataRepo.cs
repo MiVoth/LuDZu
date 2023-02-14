@@ -27,10 +27,22 @@ public class DataRepo : IDataRepo
     byte[] isFalse() => new byte[1] { (byte)49 };
     public async Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date)
     {
+        string? schooldaay = ctx.Settings.Where(s => s.Name == "school_day").Select(d => d.Value).FirstOrDefault();
+        if (int.TryParse($"{schooldaay}", out var sd))
+        {
+            if ((int)date.DayOfWeek != sd)
+            {
+                date = date.AddDays(sd - (int)date.DayOfWeek);
+            }
+        }
+        DateTime dateStart = date.AddDays(-1);
+        DateTime dateEnd = date.AddDays(1);
+
         List<LmmPerson> persons = await GetAllPersons();
         List<long?> personids = persons.Select(d => (long?)d.Id).ToList();
         List<long> unavail = await ctx.Unavailables.Where(d =>
-        d.StartDate <= date && d.EndDate >= date
+        ((d.StartDate <= date && d.EndDate >= date)
+        || (d.StartDate > dateStart && d.EndDate < dateEnd))
         && personids.Contains(d.PersonId)).Select(d => d.PersonId ?? 0).ToListAsync();
         return persons.Where(p => !unavail.Contains(p.Id)).ToList();
     }
@@ -49,8 +61,10 @@ public class DataRepo : IDataRepo
             Lastname = p.Lastname,
             Gender = p.Gender,
             UseFor = p.Usefor,
-            LastAssignmentDb =  p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault() : null,
-            LastAssignmentIds = p.AssignmentsAsMain != null ?p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id) : new List<long>(),
+            // LastAssignmentDb = p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault() : null,
+            LastAssignmentDb = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault(),
+            LastAssignmentIds = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id),
+            // LastAssignmentIds = p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id) : new List<long>(),
 
             // LastAssignments = p.AssignmentsAsMain.OrderByDescending(d => d.Id).Take(3)
             // .Select(a => new LmmPersonAssignment {

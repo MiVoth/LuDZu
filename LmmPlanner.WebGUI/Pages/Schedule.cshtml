@@ -9,28 +9,29 @@
 
 <div class="my-2">
     <div class="d-inline-flex">
-    <a asp-page="/Schedule" asp-route-date="@before" class="btn btn-primary">
-        <i class="bi bi-chevron-left" aria-hidden="true"></i>
-        Vorige Woche
-    </a>
-    <a asp-page="/Schedule" asp-route-date="@now" class="btn btn-outline-dark">
-        <i class="bi bi-home" aria-hidden="true"></i>
-        Heute
-    </a>
-    <a asp-page="/Schedule" asp-route-date="@after" class="btn btn-primary">
-        <i class="bi bi-chevron-right" aria-hidden="true"></i>
-        Nächste Woche
-    </a>
-    <form method="post" class="ms-2 d-inline-flex">
-        <input type="date" name="date" class="form-control" value="@Model.ActiveDate" />
-        <button type="submit" class="btn btn-secondary">Los</button>
-    </form>
-    <span class="ms-4">
-        <a asp-page="/Schedule" asp-page-handler="Refresh" asp-route-date="@now" id="btnReload" class="btn btn-primary">
-            <i class="bi bi-repeat" aria-hidden="true"></i>
-            Neu laden
+        <a asp-page="/Schedule" asp-route-date="@before" class="btn btn-primary">
+            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+            Vorige Woche
         </a>
-    </span>
+        <a asp-page="/Schedule" asp-route-date="@now" class="btn btn-outline-dark">
+            <i class="bi bi-home" aria-hidden="true"></i>
+            Heute
+        </a>
+        <a asp-page="/Schedule" asp-route-date="@after" class="btn btn-primary">
+            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            Nächste Woche
+        </a>
+        <form method="post" class="ms-2 d-inline-flex">
+            <input type="date" name="date" class="form-control" value="@now" />
+            <button type="submit" class="btn btn-secondary">Los</button>
+        </form>
+        <span class="ms-4">
+            <a asp-page="/Schedule" asp-page-handler="Refresh" asp-route-date="@now" id="btnReload"
+                class="btn btn-primary">
+                <i class="bi bi-repeat" aria-hidden="true"></i>
+                Neu laden
+            </a>
+        </span>
     </div>
     <hr />
 </div>
@@ -42,5 +43,5 @@
 </div>
 
 @section Scripts {
-<script src="~/js/schedule.js" asp-append-version="true"></script>
+    <script src="~/js/schedule.js" asp-append-version="true"></script>
 }

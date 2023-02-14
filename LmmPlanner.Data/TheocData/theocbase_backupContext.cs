@@ -80,7 +80,10 @@ namespace LmmPlanner.Data.TheocData
             if (!optionsBuilder.IsConfigured)
             {
                 string path = appSettings.LmmConnectionString;
-                optionsBuilder.UseSqlite($"data source={path}");
+                optionsBuilder
+                .EnableSensitiveDataLogging(true)
+                .LogTo(Console.Write)
+                .UseSqlite($"data source={path}");
             }
         }
 
