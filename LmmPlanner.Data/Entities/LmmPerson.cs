@@ -12,8 +12,8 @@ namespace LmmPlanner.Data.Entities
         public string? Firstname { get; internal set; }
         public string? Lastname { get; internal set; }
         public string Name { get => $"{Firstname} {Lastname}"; }
-        public string? Gender { get; internal set; }
-        public DateTime? LastAssignmentDb { get; internal set; }
+        public string? Gender { get; set; }
+        public DateTime? LastAssignmentDb { get; set; }
         public DateTime? LastAssignment { get => LastAssignments.OrderByDescending(d => d.Date).FirstOrDefault()?.Date; }
         public long? UseFor { get; internal set; }
         public string UseForString

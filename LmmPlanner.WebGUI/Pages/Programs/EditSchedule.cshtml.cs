@@ -39,20 +39,22 @@ namespace LmmPlanner.WebGUI.Pages.Programs
 
         public async Task<JsonResult> OnPostAssignee(long partId, long? assignmentId, long assigneeId, bool assist)
         {
-            if (assignmentId == null)
+            if (assignmentId == null || assignmentId == 0)
             {
                 var original = await _editorRepo.GetLmmSchedule(partId);
                 var assignments = await _editorRepo.GetLmmScheduleAssignments(partId);
                 if (assignments.Count == 0)
                 {
                     var assignment = new LmmAssignment {
+                        Id = await _editorRepo.NextAssignmentId(),
                         AssigneeId = assigneeId,
                         Classnumber = 1,
-                        Date = original.Date,
+                        Date = original.Date?.AddDays(4),
                         LmmScheduleId = partId,
-                        TimeStamp = 1,
+                        TimeStamp = DateTime.Now.ToFileTimeUtc(),
                         Uuid = $"{Guid.NewGuid()}"
                     };
+                    await _editorRepo.AddAssignment(assignment);
                 }
             }
             else

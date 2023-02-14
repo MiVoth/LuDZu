@@ -36,6 +36,15 @@ public class ScheduleModel : BasePageModel
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
     }
 
+    public async Task OnPost(DateTime? date)
+    {
+        if (date != null)
+        {
+            ActiveDate = date.Value;
+        }
+        Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
+    }
+
     public async Task<IActionResult> OnGetRefresh(DateTime date)
     {
         var meeting = await scheduleRepo.GetSchedule(date); //.GetAllPersons();
@@ -46,17 +55,7 @@ public class ScheduleModel : BasePageModel
     {
         FittingPersons r = await scheduleRepo.GetPersonsToPart(partId, assist);
         r.AssignmentId = assignmentId;
-        // var myViewData = new ViewDataDictionary(
-        //     new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), 
-        //     new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "_PersonListing", r.Persons } };
-        // myViewData.Model = r.Persons;
 
-        // PartialViewResult result = new PartialViewResult()
-        // {
-        //     ViewName = "_PersonListing",
-        //     ViewData = myViewData,
-        // };
-        // return result; 
         return PartialView("_PersonListing", r);
         // return new JsonResult(r);
     }

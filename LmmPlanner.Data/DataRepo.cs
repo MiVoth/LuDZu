@@ -49,8 +49,8 @@ public class DataRepo : IDataRepo
             Lastname = p.Lastname,
             Gender = p.Gender,
             UseFor = p.Usefor,
-            LastAssignmentDb = p.AssignmentsAsMain.OrderByDescending(d => d.Date).FirstOrDefault().Date,
-            LastAssignmentIds = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id),
+            LastAssignmentDb =  p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault() : null,
+            LastAssignmentIds = p.AssignmentsAsMain != null ?p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id) : new List<long>(),
 
             // LastAssignments = p.AssignmentsAsMain.OrderByDescending(d => d.Id).Take(3)
             // .Select(a => new LmmPersonAssignment {
@@ -65,11 +65,11 @@ public class DataRepo : IDataRepo
         var lmmAssign = await ctx.LmmAssignments.Where(d => ids.Contains(d.Id))
             .Select(a => new LmmPersonAssignment
             {
-                Main = a.MainPerson.Firstname + " " + a.MainPerson.Lastname,
-                Assist = a.AssistantPerson.Firstname + " " + a.AssistantPerson.Lastname,
-                Volu = a.VolunteerPerson.Firstname + " " + a.VolunteerPerson.Lastname,
+                Main = a.MainPerson == null ? "" : a.MainPerson.Firstname + " " + a.MainPerson.Lastname,
+                Assist = a.AssistantPerson == null ? "" : a.AssistantPerson.Firstname + " " + a.AssistantPerson.Lastname,
+                Volu = a.VolunteerPerson == null ? "" : a.VolunteerPerson.Firstname + " " + a.VolunteerPerson.Lastname,
                 Date = a.Date,
-                Theme = a.LmmSchedule.Theme,
+                Theme = a.LmmSchedule == null ? "" : a.LmmSchedule.Theme,
                 AssigneeId = a.AssigneeId,
                 VolunteerId = a.VolunteerId,
                 AssistantId = a.AssistantId

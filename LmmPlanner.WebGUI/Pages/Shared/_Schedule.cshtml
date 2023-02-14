@@ -19,6 +19,7 @@
         <a href="https://wol.jw.org/de/wol/meetings/r10/lp-x/@year/@week">
             @Model.MeetingDate?.ToShortDateString()
         </a>
+        <small><i>(@Model.MeetingDate?.AddDays(4).ToShortDateString())</i></small>
     </h1>
     <h2>@Model.BibleReading</h2>
     <div class="row mb-2">
@@ -27,7 +28,13 @@
     </div>
     <div class="row mb-2">
         <div class="@firtColClass"><span class="theme">Einleitende Worte</span> (1.Min)</div>
-        <div class="@colClass">@Model.Chairman</div>
+        <div class="@colClass">
+            @Model.Chairman
+            <a href="#" class="btn btn-xs btn-outline-dark" data-meeting-id="@Model.MeetingId"
+                data-assignment-id="@Model.ChairmanId">
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+            </a>
+        </div>
     </div>
 
     <div class="treasures-block">
@@ -51,7 +58,8 @@
                 </div>
                 <div class="@colClass">
                     <span>@prt.MainPerson</span>
-                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id" data-assignment-id="@prt.AssignmentId">
+                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id"
+                        data-assignment-id="@prt.AssignmentId">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -75,15 +83,16 @@
                     }
                     <span>@prt.MainPerson</span>
                     <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id"
-                    data-assignment-id="@prt.AssignmentId">
+                        data-assignment-id="@prt.AssignmentId">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
-                    @if (!PartTypeStatics.ImproveVideo.IsBetween(item.TalkId ?? 0) && !PartTypeStatics.Talk.IsBetween(item.TalkId ?? 0))
+                    @if (!PartTypeStatics.ImproveVideo.IsBetween(item.TalkId ?? 0) &&
+                   !PartTypeStatics.Talk.IsBetween(item.TalkId ?? 0))
                     {
                         <br>
                         <span>@prt.AssistantPerson</span>
                         <a href="#" class="btn btn-xs btn-outline-secondary" data-part-id="@item.Id" data-part-assist="true"
-                    data-assignment-id="@prt.AssignmentId">
+                            data-assignment-id="@prt.AssignmentId">
                             <i class="bi bi-pencil" aria-hidden="true"></i>
                         </a>
                     }
@@ -116,10 +125,19 @@
                 </div>
                 <div class="@colClass">
                     <span>@prt.MainPerson</span>
-                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id" data-assignment-id="@prt.AssignmentId">
+                    <a href="#" class="btn btn-xs btn-outline-dark" data-part-id="@item.Id"
+                        data-assignment-id="@prt.AssignmentId">
                         <i class="bi bi-pencil" aria-hidden="true"></i>
                     </a>
+                    <br>
                     <span>@prt.AssistantPerson</span>
+                    @if (PartTypeStatics.CongregationStudy.IsBetween(item.TalkId ?? 0))
+                    {
+                        <a href="#" class="btn btn-xs btn-outline-secondary" data-part-id="@item.Id" data-part-assist="true"
+                            data-assignment-id="@prt.AssignmentId">
+                            <i class="bi bi-pencil" aria-hidden="true"></i>
+                        </a>
+                    }
                 </div>
                 @* <div class="col-md-3"></div> *@
             </div>

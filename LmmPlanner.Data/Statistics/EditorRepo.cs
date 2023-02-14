@@ -8,10 +8,12 @@ namespace LmmPlanner.Data.Statistics
 {
     public interface IEditorRepo
     {
+        Task<long> NextAssignmentId();
         Task<bool> CommitChanges();
         Task<LmmSchedule> GetLmmSchedule(long id);
         Task<LmmAssignment> GetLmmAssignment(long id);
         Task<List<LmmAssignment>> GetLmmScheduleAssignments(long scheduleId);
+        Task<LmmAssignment> AddAssignment(LmmAssignment assign);
     }
 
     public class EditorRepo : IEditorRepo
@@ -23,6 +25,11 @@ namespace LmmPlanner.Data.Statistics
             ctx = context;
         }
 
+        public async Task<LmmAssignment> AddAssignment(LmmAssignment assign)
+        {
+            await ctx.AddAsync(assign);
+            return assign;
+        }
         // public async Task<List<Setting>> GetSettings()
         // {
         //     return await ctx.Settings.ToListAsync();
@@ -51,6 +58,12 @@ namespace LmmPlanner.Data.Statistics
             {
                 return false;
             }
+        }
+
+        public async Task<long> NextAssignmentId()
+        {
+            long id = await ctx.Set<LmmAssignment>().MaxAsync(d => d.Id);
+            return id + 1;
         }
     }
 

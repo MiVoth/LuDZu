@@ -45,8 +45,8 @@ namespace LmmPlanner.Data.Statistics
                 {
                     Date = d.Date,
                     TalkId = d.TalkId,
-                    PersonId = d.Assignments.FirstOrDefault().AssigneeId,
-                    AssistantId = d.Assignments.FirstOrDefault().AssistantId
+                    PersonId = d.Assignments.Select(d => d.AssigneeId).FirstOrDefault(),
+                    AssistantId = d.Assignments.Select(d => d.AssistantId).FirstOrDefault()
                 }).ToListAsync();
 
             foreach (var stud in studys)
@@ -159,10 +159,10 @@ namespace LmmPlanner.Data.Statistics
             {
                 d.Id,
                 d.Date,
-                MainFirst = d.Assignments.FirstOrDefault().MainPerson.Firstname,
-                MainLast = d.Assignments.FirstOrDefault().MainPerson.Lastname,
-                VolunteerFirst = d.Assignments.FirstOrDefault().AssistantPerson.Firstname,
-                VolunteerLast = d.Assignments.FirstOrDefault().AssistantPerson.Lastname,
+                MainFirst = d.Assignments.Select(f => f.MainPerson != null ? f.MainPerson.Firstname : "").FirstOrDefault(),
+                MainLast = d.Assignments.Select(f => f.MainPerson != null ? f.MainPerson.Lastname : "").FirstOrDefault(),
+                VolunteerFirst = d.Assignments.Select(f => f.AssistantPerson != null ? f.AssistantPerson.Firstname : "").FirstOrDefault(),
+                VolunteerLast = d.Assignments.Select(f => f.AssistantPerson != null ? f.AssistantPerson.Lastname : "").FirstOrDefault(),
             })
             .ToListAsync();
             foreach (var std in studys)

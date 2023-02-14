@@ -6,6 +6,7 @@ namespace LmmPlanner.Data.Entities
 {
     public class MeetingInfo
     {
+        public long MeetingId { get; set; }
         public string? BibleReading { get; internal set; }
         public long? ChairmanId { get; internal set; }
         public string Chairman { get; internal set; } = string.Empty;

@@ -7,7 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LmmPlanner.Data
 {
-    public class ScheduleRepo
+    public interface IScheduleRepo
+    {
+        Task<FittingPersons> GetPersonsToPart(long partId, bool assist);
+        Task<MeetingInfo> GetSchedule(DateTime now);
+    }
+
+    public class ScheduleRepo : IScheduleRepo
     {
         private MyContext db;
         public ScheduleRepo(MyContext context)
@@ -19,10 +25,11 @@ namespace LmmPlanner.Data
         {
             var myTime = (int)now.DayOfWeek == 1 ? now : now.AddDays(-1 * (int)now.DayOfWeek);
             var schd = await db.LmmMeetings
-            .Where(lm => lm.Date >= myTime.AddDays(-1) && lm.Date <= myTime.AddDays(6))
+            .Where(lm => lm.Date >= myTime.AddDays(-1) && lm.Date <= myTime.AddDays(6) && lm.Active == true)
             .OrderBy(d => d.Date)
             .Select(d => new MeetingInfo
             {
+                MeetingId = d.Id,
                 MeetingDate = d.Date,
                 BibleReading = d.BibleReading,
                 ChairmanId = d.Chairman,
@@ -73,7 +80,6 @@ namespace LmmPlanner.Data
         {
             TheocData.LmmSchedule sched = await db.LmmSchedules.Where(d => d.Id == partId)
             .FirstAsync();
-
             FittingPersons fit = new()
             {
                 ScheduleId = partId,
@@ -83,11 +89,14 @@ namespace LmmPlanner.Data
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
             List<LmmPerson> persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
-            
+
             List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
             bool addPartner = false;
             switch (fit.PartInfo)
             {
+                case PartType.Chair:
+                    fit.Persons = persons.Where(d => d.IsLmmChair).ToList();
+                    break;
                 case PartType.FirstTalk:
                     fit.Persons = persons.Where(d => d.IsLmmTalk).ToList();
                     break;
@@ -117,6 +126,11 @@ namespace LmmPlanner.Data
                     break;
                 case PartType.CongregationStudy:
                     fit.Persons = persons.Where(d => d.IsCongregationStudy).ToList();
+                    if (assist)
+                    {
+                        fit.Persons = persons.Where(d => d.IsCongregationStudyReader).ToList();
+                        assist = false;
+                    }
                     break;
                 default:
                     fit.Persons = persons;

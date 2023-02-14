@@ -1,9 +1,30 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-(function () {
+﻿(function () {
+    // register a-hrefs for detailed view/edit view
     function initPartDetails() {
+        document.querySelectorAll('a[data-meeting-id]').forEach(a => {
+            a.addEventListener('click', e => {
+                const meetingId = a.dataset.meetingId;
+                const type = a.dataset.type;
+                const partId = 1;
+                // fetch(`?handler=sched&partId=${partId}&assist=${false}&assignmentId=${assignId}`, {
+                //     method: 'get'
+                // }).then(resp => resp.text()).then(resp => {
+                //     const pt = document.getElementById('details-part');
+                //     pt.innerHTML = resp;
+                //     pt.style = `max-height:${document.querySelector('.MeetingContainer').scrollHeight}px; overflow:auto;`;
+
+                //     document.querySelectorAll('a[data-sort-header]').forEach(
+                //         s => {
+                //             s.addEventListener('click', ev => {
+                //                 ev.preventDefault();
+                //                 sortTable('personListing', s.dataset.sortHeader);
+                //             })
+                //         }
+                //     );
+                //     initBtnSavePart();
+                // });
+            });
+        })
         document.querySelectorAll('a[data-part-id]').forEach(a => {
             a.addEventListener('click', e => {
                 e.preventDefault();
@@ -25,13 +46,12 @@
                         }
                     );
                     initBtnSavePart();
-                    // sortTable('personListing', 1)
                 });
-                // console.log(a.dataset.partId);
             });
         });
     }
     initPartDetails();
+
     const btnReload = document.getElementById('btnReload');
     btnReload.onclick = e => {
         e.preventDefault();
@@ -60,7 +80,7 @@
                 body: fd
             }).then(resp => resp.json()).then(resp => {
                 console.log(resp);
-                if(resp) {
+                if (resp) {
                     btnReload.click();
                 }
             }).catch(err => console.log(err.toString()));

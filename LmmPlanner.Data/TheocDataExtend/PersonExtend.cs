@@ -5,7 +5,7 @@ namespace LmmPlanner.Data.TheocData
 {
     public partial class Person
     {
-        public virtual ICollection<LmmAssignment> AssignmentsAsMain { get; set; } = new List<LmmAssignment>();
+        public virtual ICollection<LmmAssignment>? AssignmentsAsMain { get; set; } = new List<LmmAssignment>();
         public virtual ICollection<LmmAssignment> AssignmentsAsVolunteer { get; set; } = new List<LmmAssignment>();
         public virtual ICollection<LmmAssignment> AssignmentsAsAssistant { get; set; } = new List<LmmAssignment>();
         public virtual ICollection<LmmMeeting> AssignmentsAsChairman { get; set; } = new List<LmmMeeting>();
