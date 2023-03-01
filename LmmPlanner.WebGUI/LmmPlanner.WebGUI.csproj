@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <version>0.5.0.0</version>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LmmPlanner.Data\LmmPlanner.Data.csproj" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="MiVo.Text.Replacer" Version="0.5.1" />
   </ItemGroup>
 </Project>

@@ -41,6 +41,10 @@
     </div>
     <div id="details-part" class="col-md-6"></div>
 </div>
+@* srcdoc='@Html.Raw(Model.HtmlExport)'*@
+<input value="@Model.HtmlExport" id="lol" />
+<iframe id="ifram" style="width:100%; height: 27cm;" srcdoc="<html><body>Hello, <b>world</b>.</body></html>">
+</iframe>
 
 @section Scripts {
     <script src="~/js/schedule.js" asp-append-version="true"></script>

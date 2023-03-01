@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LmmPlanner.Data;
 using LmmPlanner.Data.Entities;
+using LmmPlanner.Data.Statistics;
 using LmmPlanner.WebGUI.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,16 +16,21 @@ namespace LmmPlanner.WebGUI.Pages;
 public class ScheduleModel : BasePageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
-    private readonly ScheduleRepo scheduleRepo;
+    private readonly ISettingsRepo _settingsRepo;
+    private readonly IScheduleRepo scheduleRepo;
 
-    public ScheduleModel(ILogger<ScheduleModel> logger, ScheduleRepo scheduleRepo)
+    public ScheduleModel(ILogger<ScheduleModel> logger,
+    ISettingsRepo settingsRepo,
+    IScheduleRepo scheduleRepo)
     {
         _logger = logger;
+        _settingsRepo = settingsRepo;
         this.scheduleRepo = scheduleRepo;
     }
 
     public MeetingInfo Meeting { get; set; } = new();
     public DateTime ActiveDate { get; set; } = DateTime.Now;
+    public string HtmlExport { get; set; } = string.Empty;
     public async Task OnGet(DateTime? date)
     {
         // DateTime theDate = DateTime.Now;
@@ -33,7 +40,10 @@ public class ScheduleModel : BasePageModel
         }
         // LmmPlanner.Data
 
+
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
+        string html = await new Export.ExportService(_settingsRepo, scheduleRepo).Export();
+        HtmlExport = html;
     }
 
     public async Task OnPost(DateTime? date)
@@ -43,6 +53,8 @@ public class ScheduleModel : BasePageModel
             ActiveDate = date.Value;
         }
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
+
+
     }
 
     public async Task<IActionResult> OnGetRefresh(DateTime date)

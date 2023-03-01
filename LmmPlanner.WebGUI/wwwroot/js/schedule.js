@@ -1,4 +1,8 @@
 ﻿(function () {
+    // const ifram = document.getElementById('ifram');
+    // const lol = document.getElementById('lol');
+    // ifram.body.innerHTML = lol.value;
+    document.getElementById('ifram').contentDocument.body.innerHTML = document.getElementById('lol').value;
     // register a-hrefs for detailed view/edit view
     function initPartDetails() {
         document.querySelectorAll('a[data-meeting-id]').forEach(a => {

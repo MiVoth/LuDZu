@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="tb-margin" content="0">
+	<meta name="tb-orientation" content="portrait">
+	<meta name="tb-option-song-titles" content="no">
+	<meta name="tb-option-mwb-number" content="yes">
+	<meta name="tb-option-duration" content="yes">
+	<meta name="author" content="Stephan Strauch">
+	<meta name="version" content="5.0.1">
+	<title>Midweek Meeting Schedule (colorful)</title>
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed|Lato:400,400i,700" rel="stylesheet">
+	<!--<script>
+		if (!PAPERHEIGHT!==431.8) {document.write('<style type="text/css">section#header:nth-of-type(3n+2), section#header:nth-of-type(3n+3) { display: none; } div#week:nth-of-type(3n+3) { page-break-after: always; }</style>')}
+		if (!PAPERHEIGHT!==355.6 || !PAPERHEIGHT!==297 || !PAPERHEIGHT!==279.4) {document.write('<style type="text/css">section#header:nth-of-type(2n+2) { display: none; } div#week:nth-of-type(2n+2) { page-break-after: always; }</style>')}
+	</script>-->
+	<style type="text/css">
+		body       { margin: 0; padding: 0; font-family: 'Lato', sans-serif; font-size: 0.750rem; }
+		table      { font-size: inherit; width: 100%; margin: 0; border-collapse: collapse; }
+		td         { height: 1.500rem; padding: 0; vertical-align: middle; position: relative; }
+		hr         { border: 0; height: 0.100rem; background-color: #cccccc; margin: 0 6.000rem; }
+		h1, h2, h3 { font-family: 'Ubuntu Condensed', serif; text-align: center; }
+		h2, h3, h4 { text-transform: uppercase; }
+		h1         { font-size: 2.000rem; font-weight: normal; color: black; margin: 1.500rem 0 0 0; }
+		h1         { font-size: 1.400rem; font-weight: normal; color: black; margin: 1.100rem 0 0 0; }
+		h2         { font-size: 1.250rem; font-weight: normal; color: black; margin: 0; }
+		h2         { font-size: 1.150rem; font-weight: normal; color: black; margin: 0; }
+		h3         { font-size: 1.125rem; font-weight: bold; color: white; margin: 0; }
+		h4         { font-size: 1.000rem; font-weight: bold; margin: 0 0.500rem; }
+		p          { margin: 0 0.500rem; line-height: 0.750rem; }
+		svg        { margin: auto; display: block; }
+		.info      { font-weight: normal; color: gray; }
+		.theme     { font-weight: bold; color: black; }
+		.name      { font-weight: normal; font-style: italic; color: black; text-align: right; white-space: nowrap; }
+		.infobox   { width: 1.000rem; height: 1.000rem; line-height: 1.000rem; font-size: 0.625rem; font-weight: bold; text-align: center; color: white; }
+		.starttime { width: auto; height: 1.500rem; line-height: 1.500rem; margin: auto; font-size: 0.625rem; color: black; }
+		.duration  { margin: auto 0 auto auto; }
+		.counsel   { position: absolute; top: 0; left: 0; right:0; bottom: 0; width: 1.500rem; height: 1.500rem; line-height: 1.500rem; font-size: 0.625rem; font-weight: bold; text-align: center; color: white; background-color: rgba(101, 97, 100, 1); }
+		.gw        { color: rgba(101, 97, 100, 1); }
+		.gwb       { background-color: rgba(101, 97, 100, 1); }
+		.gwb50     { background-color: rgba(101, 97, 100, 0.5); }
+		.fm        { color: rgba(199, 137, 9, 1); }
+		.fmb       { background-color: rgba(199, 137, 9, 1); }
+		.fmb50     { background-color: rgba(199, 137, 9, 0.5); }
+		.cl        { color: rgba(153, 19, 30, 1); }
+		.clb       { background-color: rgba(153, 19, 30, 1); }
+		.clb50     { background-color: rgba(153, 19, 30, 0.5); }
+		.cob       { background-color: #333333; }
+		#gw        { margin: 0 3.000rem; /*background-color: rgba(101, 97, 100, 0.1); */}
+		#fm        { margin: 0.250rem 3.000rem; /* background-color: rgba(199, 137, 9, 0.1); */ }
+		#cl        { margin: 0 3.000rem; /*background-color: rgba(153, 19, 30, 0.1); */}
+		#other     { margin: 0.250rem 3.000rem; }
+		body {		
+					width: 22cm;}
+		.mwbColor  { background-color: [*MWB_COLOR*]; }
+		.mwbColorLight { background-color: [*MWB_COLOR_LIGHT*];}
+	</style>
+</head>
+
+<body>
+	<main>
+		<!--<p>!REPEAT_START!</p>-->
+		<section id="header">
+			<h1 data-replace="CongregationTitle">!CONGREGATION_TITLE!</h1>
+			<hr>
+			<h2 data-replace="MeetingName">!TITLE!</h2>
+		</section>
+		<div id="week" data-replace="WeekSched">
+			<div id="other">
+				<table class="top-table">
+					<tr data-info="#IF !MWB_NO!#">
+						<td class="mwbColor" style="width: 2.750rem; height: 2.000rem;">
+							<h3 data-replace="MwbNo">!MWB_NO!</h3>
+						</td> <!-- #ENDIF#-->
+						<td class="mwbColor" style="height: 2.000rem;">
+							<!--#IF !DURATION!#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>#ENDIF#
+							#IF !DURATION! EMPTY#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !EXCEPTION!#ELSEIF !CONVENTION!# — !EXCEPTION! (!NO_MEETING!)#ENDIF#</h3>#ENDIF# -->
+							<h3 style="text-align: left; margin-left: 0.500rem;" data-replace="MeetingDate">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>
+							
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--<p>#IF !NO_MEETING_EXCEPTION! EMPTY#</p>-->
+			<div id="other">
+				<table>
+					<!--Opening Song-->
+					<tr>
+						<td style="width: 2.750rem;">
+							<!--#IF !DURATION! EMPTY#<div class="infobox starttime" style="background-color: !MWB_LIGHT_COLOR!;">!SONG1_STARTTIME!</div>#ENDIF#-->
+							<div class="infobox starttime mwbColorLight" data-show="Song1Starttime" data-replace="Song1Starttime">!SONG1_STARTTIME!</div>
+						</td>
+						<td>
+							<p class="info"><span data-replace="SongName"></span> <span data-replace="SongBeginning"></span> & <span data-replace="PrayerName"></span> (<span class="name" data-replace="PrayerBeginning">(!PRAYER1_NAME!)</span>)</p>
+						</td>
+						<td>
+							<!--<p class="name">!LM_CHAIRMAN! <span class="info">(!CHAIRMAN!)</span>#IF !COUNSELOR_A1!#<span class="name"> / !COUNSELOR_A1! <span class="info">(!COUNSELOR! !AUX_SHORT!1)</span></span>#IF !COUNSELOR_A2!#<span class="name"> / !COUNSELOR_A2!
+									<span class="info">(!COUNSELOR! !AUX_SHORT!2)</span></span></p>#ENDIF##ENDIF#-->
+							<p class="name"><span data-replace="ChairPerson">!LM_CHAIRMAN!</span> (<span class="info" data-replace="ChairName">(!CHAIRMAN!)</span>)</p>
+						</td>
+					</tr>
+					<!--Opening Comments-->
+					<tr>
+						<td>
+							<!--#IF !DURATION!#<div class="infobox duration" style="background-color: [*MWB_LIGHT_COLOR*]; color: black;">1</div>
+							#ELSE#<div class="infobox starttime" style="background-color: [*MWB_LIGHT_COLOR*];">!OC_STARTTIME!</div>#ENDIF#-->
+							<div class="infobox starttime mwbColorLight" style="color: black;" data-replace="BeginningTime">1</div>
+						</td>
+						<td colspan="2">
+							<p class="theme" data-replace="OpeningName">!OPENING!</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="gw">
+				<table>
+					<!--GW Title-->
+					<tr>
+						<td style="background-color: rgba(101, 97, 100, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
+							<svg width="66.7%" height="66.7%" viewBox="0 0 1024 1024">
+								<path d="M1019 295L879 28q-6-12-20-20t-27-8H192q-13 0-27 8t-20 20L5 290q-6 12-5 28t9 26l480 670q8 10 19 10q5 0 10-2.5t9-7.5l488-664q16-23 6-50q-1-3-2-5zm-77-7H771l69-197zM575 64h206l-64 183zm93 224H371L511 86zm-354-31L250 64h199zm367 95L509 844L345 352h336zM437 831L93 352h185zm312-479h185L581 832zM188 82l69 206H79z" fill="#ffffff" />
+							</svg>
+						</td>
+						<td colspan="4">
+							<h4><span class="gw"><span data-replace="TreasureName">!GW!</span> (<span data-replace="WeekSource">(!LM_SOURCE!)</span>)</span></h4>
+						</td>
+					</tr>
+					<tr data-replace="TreasureExport">
+						<td>
+							<div class="infobox starttime gwb50" data-replace="TreasureTime">!GW1_TIME!</div>
+							<!--#IF !DURATION!#<div class="infobox duration gwb">!GW1_TIME!</div>
+							#ELSE#<div class="infobox starttime gwb50">!GW1_STARTTIME!</div>#ENDIF#-->
+						</td>
+						<td colspan="3">
+							<p class="theme" data-replace="TreasureTheme">!GW1_THEME!</p>
+						</td>
+						<td>
+							<p class="name" data-replace="TreasureMain">!GW1_SPEAKER!</p>
+						</td>
+					</tr>
+					
+					
+				</table>
+				<table style="display:none">
+					<tr>
+						<td>#IF !GW3_SPEAKER_B!#</td>
+						<td style="width: 2.750rem;">
+							#IF !DURATION!#<div class="infobox duration gwb">!GW3_TIME!</div>
+							#ELSE#<div class="infobox starttime gwb50">!GW3_STARTTIME!</div>#ENDIF#
+						</td>
+						<td>
+							<p class="theme">!GW3_THEME!</p>
+						</td>
+						<td>#IF !GW3_SPEAKER_C!#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.2);">
+							<p class="name">!GW3_SPEAKER_C!</p>
+							<div class="counsel gwb">!AUX_SHORT!2</div>
+						</td>
+						<td>#ENDIF#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.1);">
+							<p class="name">!GW3_SPEAKER_B!</p>
+							<div class="counsel gwb">!AUX_SHORT!1</div>
+						</td>
+						<td style="width: 25%;">
+							<p class="name">!GW3_SPEAKER_A!</p>
+						</td>
+						<td>#ENDIF#</td>
+					</tr>
+				</table>
+			</div>
+			<div id="fm">
+				<table>
+					<!--FM Title-->
+					<tr>
+						<td style="background-color: rgba(199, 137, 9, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
+							<svg width="75%" height="75%" viewBox="0 0 33.334 100">
+								<path d="M19.445,41.667l11.11-11.111c2.778-2.778,2.778-2.778,2.778-13.889l-11.111,11.11C19.445,30.556,19.445,30.556,19.445,41.667z" fill="white" />
+								<path d="M33.334,0L22.223,11.111c-2.777,2.777-2.777,2.777-2.777,13.889l11.11-11.111C33.334,11.111,33.334,11.111,33.334,0z" fill="white" />
+								<path d="M13.89,41.667c0-11.111,0-11.111-2.778-13.89L0,16.667c0,11.11,0,11.11,2.778,13.889L13.89,41.667z" fill="white" />
+								<path d="M19.445,58.333l11.11-11.11c2.778-2.778,2.778-2.778,2.778-13.89L22.223,44.444C19.445,47.223,19.445,47.223,19.445,58.333z" fill="white" />
+								<path d="M13.89,58.333c0-11.11,0-11.11-2.778-13.889L0,33.333c0,11.111,0,11.111,2.778,13.89L13.89,58.333z" fill="white" />
+								<path d="M19.445,75l11.11-11.111c2.778-2.777,2.778-2.777,2.778-13.889L22.223,61.111C19.445,63.889,19.445,63.889,19.445,75z" fill="white" />
+								<path d="M13.89,75c0-11.111,0-11.111-2.778-13.889L0,50c0,11.111,0,11.111,2.778,13.889L13.89,75z" fill="white" />
+								<path d="M13.89,25c0-11.111,0-11.111-2.778-13.889L0,0c0,11.111,0,11.111,2.778,13.889L13.89,25z" fill="white" />
+								<path d="M16.667,83.333L0,66.667c0,11.11,0,11.11,2.778,13.889L13.89,91.667V100h5.556v-8.333l11.11-11.111c2.778-2.778,2.778-2.778,2.778-13.889L16.667,83.333z" fill="white" />
+							</svg>
+						</td>
+						<td colspan="4">
+							<h4><span class="fm" data-replace="ServiceName">!FM!</span></h4>
+						</td>
+					</tr>
+					<!--FM Talk 1-->
+					<tr data-replace="ServiceExport">
+						<td>
+							<!--#IF !DURATION!#<div class="infobox duration fmb">!FM1_TIME!</div>
+							#ELSE#<div class="infobox starttime fmb50">!FM1_STARTTIME!</div>#ENDIF#-->
+							<div class="infobox starttime fmb50" data-replace="AssignTime">!FM1_STARTTIME!</div>
+						</td>
+						<td>
+							<p class="theme" data-replace="AssignTheme">!FM1_THEME!</p>
+						</td>
+						<!--<td>#IF !FM1_SPEAKER_C!#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.2);">
+							<p class="name">!FM1_SPEAKER_C!#IF !FM1_ASSISTANT_C!#<br><span class="info">!FM1_ASSISTANT_C!#ENDIF#</span></p>
+							<div class="counsel fmb">!AUX_SHORT!2</div>
+						</td>
+						<td>#ENDIF#</td>
+						<td>#IF !FM1_SPEAKER_B!#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.1);">
+							<p class="name">!FM1_SPEAKER_B!#IF !FM1_ASSISTANT_B!#<br><span class="info">!FM1_ASSISTANT_B!#ENDIF#</span></p>
+							<div class="counsel fmb">!AUX_SHORT!1</div>
+						</td>
+						<td>#ENDIF#</td>-->
+						<td style="width: 25%;">
+							<p class="name"><span data-replace="AssignMain">!FM1_SPEAKER_A!#IF !FM1_ASSISTANT_A!#</span><br>
+							<span class="info" data-replace="AssignAssist">!FM1_ASSISTANT_A!#ENDIF#</span></p>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="cl">
+				<table>
+					<!--CL Title-->
+					<tr>
+						<td style="background-color: rgba(153, 19, 30, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
+							<svg width="90%" height="90%" viewBox="0 0 100 100">
+								<path d="m 55.597646,70.013108 -5.940517,18.033439 -4.230019,0 2.745531,-18.056554 7.425005,0.02311 0,0 z m -37.547513,0.887353 6.517105,17.146086 -4.230019,0 -7.780717,-13.954952 5.493631,-3.191134 0,0 z M 64.304242,15.884538 c 0,-2.168944 1.758013,-3.928241 3.928241,-3.928241 0,0 14.891103,-0.0064 15.023372,0 1.738751,0.09117 3.46466,0.739675 4.901633,1.9455 L 100,23.837332 l 0,1.832494 c 0,2.709575 -2.197201,4.905486 -4.905491,4.905486 l -16.792938,0 0,1.421564 6.113879,2.676186 c 0,0 -4.626824,10.388844 -8.018286,18.843744 -4.087477,10.188514 -10.301521,12.493579 -11.416171,12.82746 l 2.199764,21.700997 -4.228734,0 -6.03683,-21.654767 -38.107407,-0.115574 -11.9439587,6.92932 -2.63381,14.841021 -4.23001806500003,0 0,-18.934919 L 6.2384423,62.873186 l 0,-11.045049 c -1.118503,0.895059 -2.367989,1.632166 -3.716355,2.177933 l 0,-12.860848 c 0,-3.77029 1.403585,-7.213119 3.716355,-9.834087 1.516591,-1.718204 3.4222815,-3.083265 5.5809527,-3.957777 1.722057,-0.696014 3.604633,-1.079977 5.575817,-1.079977 l 45.335936,0 9.602938,-8.058095 c -0.453308,0.0565 -0.914321,0.08604 -1.383039,0.08604 -2.49512,0 -4.797617,-0.829567 -6.646805,-2.226731 l 0,-0.190056 0,0 z" fill="white" />
+							</svg>
+						</td>
+						<td colspan="2">
+							<h4><span class="cl" data-replace="LifeName">!CL!</span></h4>
+							<cr><span style="margin: 0 0.500rem; font-size: 0.750rem; font-weight: normal; color: gray;">
+								<span data-replace="SongName">!SONG!</span>
+								<span data-replace="SongMiddle">!SONG2_NO!</span>
+							</span>
+						</td>
+					</tr>
+					<!--CL Talk 1-->
+					<tr data-replace="LifeExport">
+						<td>
+							<!--#IF !DURATION!#<div class="infobox duration clb">!CL1_TIME!</div>
+							#ELSE#<div class="infobox starttime clb50">!CL1_STARTTIME!</div>#ENDIF#-->
+							<div class="infobox starttime clb50" data-replace="LifeTime">!CL1_STARTTIME!</div>
+						</td>
+						<td>
+							<p class="theme" data-replace="LifeTheme">!CL1_THEME!</p>
+						</td>
+						<td>
+							<p class="name" data-replace="LifeMain">!CL1_SPEAKER! <span class="info" data-hide="LifeAssist">(<span data-replace="LeaderName"></span>)</span></p>
+							<p class="name" data-show="LifeAssist"><span data-replace="LifeAssist">!CBS_READER!<span> (<span class="info" data-replace="ReaderName">(!READER!)</span>)</p>
+						</td>
+					</tr>
+					
+				</table>
+			</div>
+			<div id="other">
+				<table>
+					<!--Conclusion and CO Talk
+					<tr>
+						<td>#IF !CO_VISIT!#</td>
+						<td style="width: 2.750rem;">
+							#IF !DURATION!#<div class="infobox duration" style="background-color: !MWB_LIGHT_COLOR!; color: black;">3</div>
+							#ELSE#<div class="infobox starttime" style="background-color: !MWB_LIGHT_COLOR!;">!CC_STARTTIME!</div>#ENDIF#
+						</td>
+						<td colspan="2">
+							<p class="theme">!CONCLUSION!</p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							#IF !DURATION!#<div class="infobox duration" style="background-color: !MWB_LIGHT_COLOR!; color: black;">!CO_TIME!</div>
+							#ELSE#<div class="infobox starttime" style="background-color: !MWB_LIGHT_COLOR!;">!CO_STARTTIME!</div>#ENDIF#
+						</td>
+						<td>
+							<p class="theme">!CO_THEME!</p>
+						</td>
+						<td>
+							<p class="name">!CO_NAME! <span class="info">(!CO!)</span></p>
+						</td>
+						<td>#ENDIF#</td>
+					</tr>-->
+					<!--Conclusion-->
+					<tr>
+						<!--<td>#IF !CO_VISIT! EMPTY!#</td>-->
+						<td style="width: 2.750rem;">
+							<!--#IF !DURATION!#<div class="infobox duration" style="background-color: !MWB_LIGHT_COLOR!; color: black;">3</div>
+							#ELSE#<div class="infobox starttime" style="background-color: !MWB_LIGHT_COLOR!;">!CC_STARTTIME!</div>#ENDIF#-->
+							<div class="infobox starttime mwbColorLight" data-replace="ConclusionTime"></div>
+						</td>
+						<td>
+							<p class="theme" data-replace="ConclusionName">!CONCLUSION!</p>
+						</td>
+						<!--<td>#ENDIF#</td>-->
+					</tr>
+					<!--Closing Song-->
+					<tr>
+						<td style="width: 2.750rem;">
+							<div class="infobox starttime mwbColorLight" data-replace="EndTime">!SONG3_STARTTIME!</div>
+						</td>
+						<td>
+							<!--<p class="info">!SONG! !SONG3_NO!#IF !SONG3_NAME!#: !SONG3_NAME!#ENDIF# & !PRAYER! #IF !PRAYER2_NAME!#<span class="name">(!PRAYER2_NAME!)</span>#ENDIF#</p>-->
+							<p class="info"><span data-replace="SongName"></span> <span data-replace="SongEnd"></span> & <span data-replace="PrayerName"></span> (<span class="name" data-replace="PrayerEnd">(!PRAYER1_NAME!)</span>)</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--<p>#ENDIF#</p>-->
+		</div>
+		<!--<p>!REPEAT_END!</p>-->
+	</main>
+</body>
+
+</html>

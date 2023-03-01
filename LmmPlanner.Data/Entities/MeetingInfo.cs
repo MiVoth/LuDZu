@@ -47,6 +47,7 @@ namespace LmmPlanner.Data.Entities
         public string? Source { get; internal set; }
         public long Id { get; internal set; }
         public long? Time { get; internal set; }
+        public long? RowOrder { get; internal set; }
 
         public static bool IsTreasurePart(long? talkId)
         {

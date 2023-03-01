@@ -54,6 +54,7 @@ namespace LmmPlanner.Data
                 TalkId = d.TalkId,
                 Source = d.Source,
                 Time = d.Time,
+                RowOrder = d.Roworder,
                 TalkMeeting = d.TalkInfo != null ? d.TalkInfo.Meeting : null,
                 TalkMeetingSection = d.TalkInfo != null ? d.TalkInfo.MeetingSection : null
             })
