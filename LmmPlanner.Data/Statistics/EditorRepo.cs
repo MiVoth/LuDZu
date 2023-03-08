@@ -2,20 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LmmPlanner.Data.TheocData;
+using LmmPlanner.Entities.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LmmPlanner.Data.Statistics
 {
-    public interface IEditorRepo
-    {
-        Task<long> NextAssignmentId();
-        Task<bool> CommitChanges();
-        Task<LmmSchedule> GetLmmSchedule(long id);
-        Task<LmmAssignment> GetLmmAssignment(long id);
-        Task<List<LmmAssignment>> GetLmmScheduleAssignments(long scheduleId);
-        Task<LmmAssignment> AddAssignment(LmmAssignment assign);
-    }
-
     public class EditorRepo : IEditorRepo
     {
         private MyContext ctx;
@@ -37,6 +28,10 @@ namespace LmmPlanner.Data.Statistics
         public async Task<LmmSchedule> GetLmmSchedule(long id)
         {
             return await ctx.LmmSchedules.FirstAsync(d => d.Id == id);
+        }
+        public void Remove(LmmSchedule schedule)
+        {
+            ctx.Remove(schedule); 
         }
         public async Task<List<LmmAssignment>> GetLmmScheduleAssignments(long scheduleId)
         {

@@ -6,15 +6,24 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<form method="post">
+<form method="post" class="col-lg-4 col-md-6">
     <div class="mb-2">
         <label asp-for="ActiveSchedule.Theme" class="col-form-label"></label>
         <input asp-for="ActiveSchedule.Theme" class="form-control">
+    </div>
+    <div class="mb-2">
+        <label asp-for="ActiveSchedule.Time" class="col-form-label"></label>
+        <input asp-for="ActiveSchedule.Time" class="form-control">
     </div>
     <p>
         <button type="submit" class="btn btn-primary">
             <i class="bi bi-save" aria-hidden="true"></i>
             Speichern
+        </button>
+
+        <button type="submit" class="btn btn-danger" asp-page-handler="Delete">
+            <i class="bi bi-trash" aria-hidden="true"></i>
+            Löschen
         </button>
     </p>
 </form>

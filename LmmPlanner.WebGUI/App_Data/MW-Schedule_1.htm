@@ -19,13 +19,13 @@
 	<style type="text/css">
 		body       { margin: 0; padding: 0; font-family: 'Lato', sans-serif; font-size: 0.750rem; }
 		table      { font-size: inherit; width: 100%; margin: 0; border-collapse: collapse; }
-		td         { height: 1.200rem; padding: 0; vertical-align: middle; position: relative; }
+		td         { height: 1.500rem; padding: 0; vertical-align: middle; position: relative; }
 		hr         { border: 0; height: 0.100rem; background-color: #cccccc; margin: 0 6.000rem; }
 		h1, h2, h3 { font-family: 'Ubuntu Condensed', serif; text-align: center; }
 		h2, h3, h4 { text-transform: uppercase; }
 		h1         { font-size: 2.000rem; font-weight: normal; color: black; margin: 1.500rem 0 0 0; }
-		h1, .h1         { font-size: 1.400rem; font-weight: normal; color: black; margin: 1.100rem 0 0 0; }
-		h2, .h2         { font-size: 1.250rem; font-weight: normal; color: black; margin: 0; }
+		h1         { font-size: 1.400rem; font-weight: normal; color: black; margin: 1.100rem 0 0 0; }
+		h2         { font-size: 1.250rem; font-weight: normal; color: black; margin: 0; }
 		h2         { font-size: 1.150rem; font-weight: normal; color: black; margin: 0; }
 		h3         { font-size: 1.125rem; font-weight: bold; color: white; margin: 0; }
 		h4         { font-size: 1.000rem; font-weight: bold; margin: 0 0.500rem; }
@@ -52,14 +52,11 @@
 		#fm        { margin: 0.250rem 3.000rem; /* background-color: rgba(199, 137, 9, 0.1); */ }
 		#cl        { margin: 0 3.000rem; /*background-color: rgba(153, 19, 30, 0.1); */}
 		#other     { margin: 0.250rem 3.000rem; }
-		body {		width: 22cm;}
-		table { max-width: 18cm; }
-		.top-table td, .table-head td {
-			height: 1.2rem;
-		}
-		#gw, #fm, #cl, #other { margin-top: 1px; margin-bottom: 1px;}
+		body {		
+					width: 22cm;}
 		.mwbColor  { background-color: "*MWB_COLOR*"; }
 		.mwbColorLight { background-color: "*MWB_COLOR_LIGHT*";}
+		.week { page-break-inside: avoid; }
 	</style>
 </head>
 
@@ -67,23 +64,18 @@
 	<main>
 		<!--<p>!REPEAT_START!</p>-->
 		<section id="header">
-			<!--<h1 data-replace="CongregationTitle">!CONGREGATION_TITLE!</h1>
+			<h1 data-replace="CongregationTitle">!CONGREGATION_TITLE!</h1>
 			<hr>
-			<h2 data-replace="MeetingName">!TITLE!</h2>-->
-			<div>
-				<!-- <span class="h1" data-replace="CongregationTitle">!CONGREGATION_TITLE!</span> -->
-				<span class="h2" data-replace="MeetingName">!TITLE!</h2>
-				<hr>
-			</div>
+			<h2 data-replace="MeetingName">!TITLE!</h2>
 		</section>
 		<div id="week" data-replace="WeekSched">
 			<div id="other">
 				<table class="top-table">
 					<tr data-info="#IF !MWB_NO!#">
-						<td class="mwbColor" style="width: 2.750rem;">
+						<td class="mwbColor" style="width: 2.750rem; height: 2.000rem;">
 							<h3 data-replace="MwbNo">!MWB_NO!</h3>
 						</td> <!-- #ENDIF#-->
-						<td class="mwbColor">
+						<td class="mwbColor" style="height: 2.000rem;">
 							<!--#IF !DURATION!#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>#ENDIF#
 							#IF !DURATION! EMPTY#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !EXCEPTION!#ELSEIF !CONVENTION!# — !EXCEPTION! (!NO_MEETING!)#ENDIF#</h3>#ENDIF# -->
 							<h3 style="text-align: left; margin-left: 0.500rem;" data-replace="MeetingDate">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>
@@ -96,7 +88,7 @@
 			<div id="other">
 				<table>
 					<!--Opening Song-->
-					<tr class="table-head">
+					<tr>
 						<td style="width: 2.750rem;">
 							<!--#IF !DURATION! EMPTY#<div class="infobox starttime" style="background-color: !MWB_LIGHT_COLOR!;">!SONG1_STARTTIME!</div>#ENDIF#-->
 							<div class="infobox starttime mwbColorLight" data-show="Song1Starttime" data-replace="Song1Starttime">!SONG1_STARTTIME!</div>
@@ -126,8 +118,8 @@
 			<div id="gw">
 				<table>
 					<!--GW Title-->
-					<tr class="table-head">
-						<td style="background-color: rgba(101, 97, 100, 1); width: 2.750rem; text-align: center;">
+					<tr>
+						<td style="background-color: rgba(101, 97, 100, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
 							<svg width="66.7%" height="66.7%" viewBox="0 0 1024 1024">
 								<path d="M1019 295L879 28q-6-12-20-20t-27-8H192q-13 0-27 8t-20 20L5 290q-6 12-5 28t9 26l480 670q8 10 19 10q5 0 10-2.5t9-7.5l488-664q16-23 6-50q-1-3-2-5zm-77-7H771l69-197zM575 64h206l-64 183zm93 224H371L511 86zm-354-31L250 64h199zm367 95L509 844L345 352h336zM437 831L93 352h185zm312-479h185L581 832zM188 82l69 206H79z" fill="#ffffff" />
 							</svg>
@@ -182,8 +174,8 @@
 			<div id="fm">
 				<table>
 					<!--FM Title-->
-					<tr class="table-head">
-						<td style="background-color: rgba(199, 137, 9, 1); width: 2.750rem; text-align: center;">
+					<tr>
+						<td style="background-color: rgba(199, 137, 9, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
 							<svg width="75%" height="75%" viewBox="0 0 33.334 100">
 								<path d="M19.445,41.667l11.11-11.111c2.778-2.778,2.778-2.778,2.778-13.889l-11.111,11.11C19.445,30.556,19.445,30.556,19.445,41.667z" fill="white" />
 								<path d="M33.334,0L22.223,11.111c-2.777,2.777-2.777,2.777-2.777,13.889l11.11-11.111C33.334,11.111,33.334,11.111,33.334,0z" fill="white" />
@@ -210,14 +202,21 @@
 						<td>
 							<p class="theme" data-replace="AssignTheme">!FM1_THEME!</p>
 						</td>
+						<!--<td>#IF !FM1_SPEAKER_C!#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.2);">
+							<p class="name">!FM1_SPEAKER_C!#IF !FM1_ASSISTANT_C!#<br><span class="info">!FM1_ASSISTANT_C!#ENDIF#</span></p>
+							<div class="counsel fmb">!AUX_SHORT!2</div>
+						</td>
+						<td>#ENDIF#</td>
+						<td>#IF !FM1_SPEAKER_B!#</td>
+						<td style="width: 25%; background-color: rgba(0,0,0,0.1);">
+							<p class="name">!FM1_SPEAKER_B!#IF !FM1_ASSISTANT_B!#<br><span class="info">!FM1_ASSISTANT_B!#ENDIF#</span></p>
+							<div class="counsel fmb">!AUX_SHORT!1</div>
+						</td>
+						<td>#ENDIF#</td>-->
 						<td style="width: 25%;">
-							<p class="name">
-								<span data-replace="AssignMain">!FM1_SPEAKER_A!#IF !FM1_ASSISTANT_A!#</span>
-								<span data-show="AssignAssist">
-									<span>/</span>
-									<span class="info" data-replace="AssignAssist">!FM1_ASSISTANT_A!#ENDIF#</span>
-								</span>
-							</p>
+							<p class="name"><span data-replace="AssignMain">!FM1_SPEAKER_A!#IF !FM1_ASSISTANT_A!#</span><br>
+							<span class="info" data-replace="AssignAssist">!FM1_ASSISTANT_A!#ENDIF#</span></p>
 						</td>
 					</tr>
 				</table>
@@ -225,8 +224,8 @@
 			<div id="cl">
 				<table>
 					<!--CL Title-->
-					<tr class="table-head">
-						<td style="background-color: rgba(153, 19, 30, 1); width: 2.750rem; text-align: center;">
+					<tr>
+						<td style="background-color: rgba(153, 19, 30, 1); width: 2.750rem; height: 2.000rem; text-align: center;">
 							<svg width="90%" height="90%" viewBox="0 0 100 100">
 								<path d="m 55.597646,70.013108 -5.940517,18.033439 -4.230019,0 2.745531,-18.056554 7.425005,0.02311 0,0 z m -37.547513,0.887353 6.517105,17.146086 -4.230019,0 -7.780717,-13.954952 5.493631,-3.191134 0,0 z M 64.304242,15.884538 c 0,-2.168944 1.758013,-3.928241 3.928241,-3.928241 0,0 14.891103,-0.0064 15.023372,0 1.738751,0.09117 3.46466,0.739675 4.901633,1.9455 L 100,23.837332 l 0,1.832494 c 0,2.709575 -2.197201,4.905486 -4.905491,4.905486 l -16.792938,0 0,1.421564 6.113879,2.676186 c 0,0 -4.626824,10.388844 -8.018286,18.843744 -4.087477,10.188514 -10.301521,12.493579 -11.416171,12.82746 l 2.199764,21.700997 -4.228734,0 -6.03683,-21.654767 -38.107407,-0.115574 -11.9439587,6.92932 -2.63381,14.841021 -4.23001806500003,0 0,-18.934919 L 6.2384423,62.873186 l 0,-11.045049 c -1.118503,0.895059 -2.367989,1.632166 -3.716355,2.177933 l 0,-12.860848 c 0,-3.77029 1.403585,-7.213119 3.716355,-9.834087 1.516591,-1.718204 3.4222815,-3.083265 5.5809527,-3.957777 1.722057,-0.696014 3.604633,-1.079977 5.575817,-1.079977 l 45.335936,0 9.602938,-8.058095 c -0.453308,0.0565 -0.914321,0.08604 -1.383039,0.08604 -2.49512,0 -4.797617,-0.829567 -6.646805,-2.226731 l 0,-0.190056 0,0 z" fill="white" />
 							</svg>
@@ -250,13 +249,8 @@
 							<p class="theme" data-replace="LifeTheme">!CL1_THEME!</p>
 						</td>
 						<td>
-							<p class="name">
-								<span data-replace="LifeMain">!CL1_SPEAKER!</span> 
-								<span class="name" data-show="LifeAssist">
-									/
-								<span data-replace="LifeAssist">!CBS_READER!<span> 
-							</span>
-						</p>
+							<p class="name" data-replace="LifeMain">!CL1_SPEAKER! <span class="info" data-hide="LifeAssist">(<span data-replace="LeaderName"></span>)</span></p>
+							<p class="name" data-show="LifeAssist"><span data-replace="LifeAssist">!CBS_READER!<span> (<span class="info" data-replace="ReaderName">(!READER!)</span>)</p>
 						</td>
 					</tr>
 					

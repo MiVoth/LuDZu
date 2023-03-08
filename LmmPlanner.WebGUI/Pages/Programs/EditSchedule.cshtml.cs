@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LmmPlanner.Data.Statistics;
 using LmmPlanner.Data.TheocData;
+using LmmPlanner.Entities.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -33,6 +34,18 @@ namespace LmmPlanner.WebGUI.Pages.Programs
                 throw new System.Exception("No!");
             }
             original.Theme = ActiveSchedule.Theme;
+            original.Time = ActiveSchedule.Time;
+            await _editorRepo.CommitChanges();
+            return RedirectToPage("/Schedule", new { date = original.Date?.ToString("yyyy-MM-dd") });
+        }
+        public async Task<IActionResult> OnPostDelete(long id)
+        {
+            var original = await _editorRepo.GetLmmSchedule(id);
+            if (ActiveSchedule == null)
+            {
+                throw new System.Exception("No!");
+            }
+            _editorRepo.Remove(original);
             await _editorRepo.CommitChanges();
             return RedirectToPage("/Schedule", new { date = original.Date?.ToString("yyyy-MM-dd") });
         }
@@ -45,7 +58,8 @@ namespace LmmPlanner.WebGUI.Pages.Programs
                 var assignments = await _editorRepo.GetLmmScheduleAssignments(partId);
                 if (assignments.Count == 0)
                 {
-                    var assignment = new LmmAssignment {
+                    var assignment = new LmmAssignment
+                    {
                         Id = await _editorRepo.NextAssignmentId(),
                         AssigneeId = assigneeId,
                         Classnumber = 1,

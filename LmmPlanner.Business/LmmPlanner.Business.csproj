@@ -11,5 +11,6 @@
   <ItemGroup>
   <ProjectReference Include="..\LmmPlanner.Entities\LmmPlanner.Entities.csproj" />
     <PackageReference Include="MiVo.Text.Replacer" Version="0.5.1" />
+    <PackageReference Include="PuppeteerSharp" Version="9.0.2" />
   </ItemGroup>
 </Project>

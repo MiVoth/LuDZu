@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LmmPlanner.Data.TheocData;
 using LmmPlanner.Entities.Interfaces;
 using LmmPlanner.Entities.Models;
+using PuppeteerSharp;
 
 namespace LmmPlanner.Business.Services
 {
@@ -20,7 +21,43 @@ namespace LmmPlanner.Business.Services
             this.scheduleRepo = scheduleRepo;
         }
 
-        public async Task<string> Export()
+        public async Task<byte[]> ExportToPdfAsync(DateTime start, DateTime end)
+        {
+
+            using var browserFetcher = new BrowserFetcher();
+            await browserFetcher.DownloadAsync();
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true, Args = new[] {
+                // "--font-render-hinting=none'",
+                "--force-color-profile=srgb"
+            } });
+            await using var page = await browser.NewPageAsync();
+            await page.SetUserAgentAsync("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36");
+            // await page.GoToAsync("http://www.google.com"); // In case of fonts being loaded from a CDN, use WaitUntilNavigation.Networkidle0 as a second param.
+            // await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
+
+            // await using var page = await browser.NewPageAsync();
+            string html =  await ExportAsync(start, end);
+            await page.SetContentAsync(html);
+            await page.GetContentAsync();
+            return await page.PdfDataAsync(new PdfOptions {
+                PrintBackground = true
+            });
+            // var result = await page.GetContentAsync();
+
+        }
+        public async Task<string> ExportAsync()
+        {
+            DateTime activeDate = DateTime.Now;
+
+            return await ExportAsync(activeDate, activeDate.AddDays(7 * 3));
+        }
+        // public async Task<string> ExportAsync2(DateTime start, DateTime end)
+        // {
+
+        // }
+
+
+        public async Task<string> ExportAsync(DateTime start, DateTime end)
         {
             // var rpl = new DocumentForger.Replacer(System.IO.File.ReadAllText(@"App_Data\MW-Schedule_1.htm"));
             string template = System.IO.File.ReadAllText(@"App_Data\MW-Schedule_1.htm");
@@ -29,19 +66,23 @@ namespace LmmPlanner.Business.Services
                 ReplacePattern = "\"*{0}*\""
             }); // DocumentForger.Replacer();
             // rpl.ReplacePattern = "\"*{0}*\"";
-            DateTime ActiveDate = DateTime.Now;
-            var Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
+            var Meeting = await scheduleRepo.GetSchedule(start); //.GetAllPersons();
 
-            var exp = await GetExport(Meeting);
+            var exp = await GetExportAsync(Meeting);
             List<ScheduleExport> schedList = new() {
                 exp
             };
-            Meeting = await scheduleRepo.GetSchedule(ActiveDate.AddDays(7)); //.GetAllPersons();
-            exp = await GetExport(Meeting);
-            schedList.Add(exp);
-            Meeting = await scheduleRepo.GetSchedule(ActiveDate.AddDays(14)); //.GetAllPersons();
-            exp = await GetExport(Meeting);
-            schedList.Add(exp);
+            DateTime newDate = start;
+            while (newDate < end)
+            {
+                newDate = newDate.AddDays(7);
+                Meeting = await scheduleRepo.GetSchedule(newDate); //.GetAllPersons();
+                exp = await GetExportAsync(Meeting);
+                schedList.Add(exp);
+            }
+            // Meeting = await scheduleRepo.GetSchedule(ActiveDate.AddDays(14)); //.GetAllPersons();
+            // exp = await GetExportAsync(Meeting);
+            // schedList.Add(exp);
             // rpl.ReplacementRelation.Add("treasure-template", new DocumentForger.Replacement
             // {
             //     Type = DocumentForger.ReplacementType.Template,
@@ -75,7 +116,7 @@ namespace LmmPlanner.Business.Services
             return html;
         }
 
-        public async Task<ScheduleExport> GetExport(MeetingInfo Meeting)
+        public async Task<ScheduleExport> GetExportAsync(MeetingInfo Meeting)
         {
             Congregation cong = await _settingsRepo.GetCongregation();
             Setting? schoolDay = await _settingsRepo.GetSetting("school_day");

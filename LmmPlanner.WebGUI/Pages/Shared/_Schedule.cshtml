@@ -21,7 +21,7 @@
         </a>
         <small><i>(@Model.MeetingDate?.AddDays(4).ToShortDateString())</i></small>
     </h1>
-    @if(!string.IsNullOrEmpty(Model.Alert)) 
+    @if (!string.IsNullOrEmpty(Model.Alert))
     {
         <div class="alert alert-info">
             @Model.Alert
@@ -152,8 +152,14 @@
     @foreach (var item in Model.OtherParts)
     {
         <div class="row mb-2">
-            <div class="@firtColClass"><span class="theme">@item.Theme</span> (@item.Time Min): </div>
-            <div class="@colClass">@item.TalkId... @item.TalkMeeting @item.TalkMeetingSection</div>
+            <div class="@firtColClass"><span class="theme">@item.Theme</span> (@item.Time Min):
+                <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id" class="btn btn-xs btn-outline-secondary">
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="@colClass">@item.TalkId... @item.TalkMeeting @item.TalkMeetingSection
+
+            </div>
         </div>
     }
 

@@ -1,34 +1,42 @@
-﻿@page "{personId:long}"
+﻿@page
 @model PlanModel
 @{
     ViewData["Title"] = "Home page";
+    string st = Model.StartDate.ToString("yyyy-MM-dd");
+    string en = Model.EndDate.ToString("yyyy-MM-dd");
 }
 
 <div class="text-center">
-    Plan
+    <h1>Plan</h1>
 </div>
 
-<form method="post">
-    <div>
-        <label asp-for="StartDate">Von</label>
-        <input class="form-control" asp-for="StartDate" />
-    </div>
+<form class="col-lg-6" method="post">
+    <div class="row">
+        <div class="col">
+            <label asp-for="StartDate">Von</label>
+            <input class="form-control" asp-for="StartDate" type="date" />
+        </div>
 
-    <div>
-        <label asp-for="EndDate">Bis</label>
-        <input class="form-control" asp-for="EndDate" />
+        <div class="col">
+            <label asp-for="EndDate">Bis</label>
+            <input class="form-control" asp-for="EndDate" type="date" />
+        </div>
     </div>
-
-    <div>
-        <button type="submit">
+    <div class="mt-2">
+        <a class="btn btn-secondary" id="btnPreview" asp-page="/Export/Plan" asp-page-handler="PostExportPlan">
+            <i class="bi bi-eye" aria-hidden="t"></i>
+            Vorschau anzeigen
+        </a>
+        <button type="submit" class="btn btn-primary">
             <i class="bi bi-save2" aria-hidden="t"></i>
             Download Export
         </button>
     </div>
+    <hr />
 </form>
 
 <div>
-    <iframe id="myIframe"></iframe>
+    <iframe id="myIframe" src="?handler=ExportPlan&start=@st&end=@en"></iframe>
 </div>
 
 @section Scripts {
