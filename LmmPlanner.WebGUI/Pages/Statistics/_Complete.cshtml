@@ -1,4 +1,4 @@
-@model LmmPlanner.Data.Entities.AssignmentOverview
+@model LmmPlanner.Entities.Models.AssignmentOverview
 @{
     @* ViewData["Title"] = "Hallo"; *@
 }
@@ -15,6 +15,7 @@
                 <th>
                     <a asp-page="/Schedule" asp-route-date="@dateString">
                         @meeting.Date.ToString("dd.MM.yy")
+                        <br><small>@meeting.Date.AddDays(4).ToString("dd.MM.yy")</small>
                     </a>
                 </th>
             }

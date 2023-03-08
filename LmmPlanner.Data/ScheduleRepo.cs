@@ -2,17 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LmmPlanner.Data.Entities;
+using LmmPlanner.Entities.Models;
+using LmmPlanner.Data.Helper;
 using Microsoft.EntityFrameworkCore;
+using LmmPlanner.Entities.Interfaces;
 
 namespace LmmPlanner.Data
 {
-    public interface IScheduleRepo
-    {
-        Task<FittingPersons> GetPersonsToPart(long partId, bool assist);
-        Task<MeetingInfo> GetSchedule(DateTime now);
-    }
-
     public class ScheduleRepo : IScheduleRepo
     {
         private MyContext db;
@@ -23,8 +19,8 @@ namespace LmmPlanner.Data
 
         public async Task<MeetingInfo> GetSchedule(DateTime now)
         {
-            var myTime = (int)now.DayOfWeek == 1 ? now : now.AddDays(-1 * (int)now.DayOfWeek);
-            var schd = await db.LmmMeetings
+            DateTime myTime = (int)now.DayOfWeek == 1 ? now : now.AddDays(-1 * (int)now.DayOfWeek);
+            MeetingInfo? schd = await db.LmmMeetings
             .Where(lm => lm.Date >= myTime.AddDays(-1) && lm.Date <= myTime.AddDays(6) && lm.Active == true)
             .OrderBy(d => d.Date)
             .Select(d => new MeetingInfo
@@ -42,9 +38,11 @@ namespace LmmPlanner.Data
                 PrayerBeginning = d.PrayerBeginningPerson != null ? d.PrayerBeginningPerson.Firstname + " " + d.PrayerBeginningPerson.Lastname : "",
                 PrayerEndId = d.PrayerEnd,
                 PrayerEnd = d.PrayerEndPerson != null ? d.PrayerEndPerson.Firstname + " " + d.PrayerEndPerson.Lastname : "",
-            }).FirstAsync();
-
-            var parts = await db.LmmSchedules
+            }).FirstOrDefaultAsync();
+            if(schd == null) {
+                schd = new();
+            }
+            List<MeetingPartInfo> parts = await db.LmmSchedules
             .Where(d => d.Date >= myTime.AddDays(-1) && d.Date <= myTime.AddDays(6))
             .OrderBy(d => d.Roworder)
             .Select(d => new MeetingPartInfo
@@ -60,8 +58,8 @@ namespace LmmPlanner.Data
             })
             .ToListAsync();
 
-            var schedIds = parts.Select(d => (long?)d.Id).ToList();
-            var asmnt = await db.LmmAssignments
+            List<long?> schedIds = parts.Select(d => (long?)d.Id).ToList();
+            List<MeetingAssignmentInfo> asmnt = await db.LmmAssignments
             .Where(d => schedIds.Contains(d.LmmScheduleId))
             .Select(d => new MeetingAssignmentInfo
             {
@@ -74,6 +72,13 @@ namespace LmmPlanner.Data
             .ToListAsync();
             schd.AssignmentInfos = asmnt;
             schd.PartInfos = parts;
+
+            List<TheocData.Exception> exeption = await db.Exceptions.Where(d => d.Active == true && d.Date >= myTime.AddDays(-1) && d.Date <= myTime.AddDays(6)).ToListAsync();
+            if (exeption.Any())
+            {
+                var exc = exeption.First();
+                schd.Alert = $"{ExceptionHelper.TypeToString(exc.Type)} - {exc.Date:dd.MM.yyyy} - {exc.Date2:dd.MM.yyyy}";
+            }
             return schd;
         }
 

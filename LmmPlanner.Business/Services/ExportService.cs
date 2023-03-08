@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LmmPlanner.Data;
-using LmmPlanner.Data.Entities;
-using LmmPlanner.Data.Statistics;
 using LmmPlanner.Data.TheocData;
+using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Models;
 
-namespace LmmPlanner.WebGUI.Export
+namespace LmmPlanner.Business.Services
 {
-    public class ExportService
+    public class ExportService : IExportService
     {
         private ISettingsRepo _settingsRepo;
         private IScheduleRepo scheduleRepo;

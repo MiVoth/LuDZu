@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LmmPlanner.Data;
-using LmmPlanner.Data.Entities;
-using LmmPlanner.Data.Statistics;
+using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Models;
 using LmmPlanner.WebGUI.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace LmmPlanner.WebGUI.Pages.Statistics
 {

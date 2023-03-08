@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LmmPlanner.Data.Entities
+namespace LmmPlanner.Entities.Models
 {
     public class AssignmentOverviewMeeting
     {

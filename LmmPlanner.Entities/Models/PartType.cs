@@ -1,4 +1,4 @@
-namespace LmmPlanner.Data.Entities
+namespace LmmPlanner.Entities.Models
 {
     public enum PartType
     {

@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LmmPlanner.Data.Entities
+namespace LmmPlanner.Entities.Models
 {
     public class MeetingInfo
     {
         public long MeetingId { get; set; }
-        public string? BibleReading { get; internal set; }
-        public long? ChairmanId { get; internal set; }
-        public string Chairman { get; internal set; } = string.Empty;
-        public long? SongEnd { get; internal set; }
-        public long? SongMiddle { get; internal set; }
-        public long? SongBeginning { get; internal set; }
-        public string? ClosingComments { get; internal set; }
-        public long? PrayerEndId { get; internal set; }
-        public long? PrayerBeginningId { get; internal set; } = null;
-        public string PrayerBeginning { get; internal set; } = string.Empty;
-        public string PrayerEnd { get; internal set; } = string.Empty;
-        public DateTime? MeetingDate { get; internal set; }
+        public string? BibleReading { get; set; }
+        public long? ChairmanId { get; set; }
+        public string Chairman { get; set; } = string.Empty;
+        public long? SongEnd { get; set; }
+        public long? SongMiddle { get; set; }
+        public long? SongBeginning { get; set; }
+        public string? ClosingComments { get; set; }
+        public long? PrayerEndId { get; set; }
+        public long? PrayerBeginningId { get; set; } = null;
+        public string PrayerBeginning { get; set; } = string.Empty;
+        public string PrayerEnd { get; set; } = string.Empty;
+        public DateTime? MeetingDate { get; set; }
 
         public bool MoreClasses { get => AssignmentInfos.Any(d => d.Classnumber > 1); }
         public List<MeetingPartInfo> PartInfos { get; set; } = new();
@@ -27,6 +27,7 @@ namespace LmmPlanner.Data.Entities
         public IEnumerable<MeetingPartInfo> ServiceParts { get => PartInfos.Where(d => d.ServicePart); }
         public IEnumerable<MeetingPartInfo> LifeParts { get => PartInfos.Where(d => d.LifePart); }
         public IEnumerable<MeetingPartInfo> OtherParts { get => PartInfos.Where(d => !d.TreasurePart && !d.ServicePart && !d.LifePart); }
+        public string Alert { get; set; } = string.Empty;
 
         public MeetingAssignmentInfo GetAssignmentToPart(long scheduleId)
         {
@@ -36,18 +37,18 @@ namespace LmmPlanner.Data.Entities
 
     public class MeetingPartInfo
     {
-        public string? Theme { get; internal set; }
-        public long? TalkId { get; internal set; }
-        public long? TalkMeetingSection { get; internal set; }
-        public long? TalkMeeting { get; internal set; }
+        public string? Theme { get; set; }
+        public long? TalkId { get; set; }
+        public long? TalkMeetingSection { get; set; }
+        public long? TalkMeeting { get; set; }
 
         public bool TreasurePart { get => IsTreasurePart(TalkId); }
         public bool ServicePart { get => IsServicePart(TalkId); }
         public bool LifePart { get => IsLifePart(TalkId); }
-        public string? Source { get; internal set; }
-        public long Id { get; internal set; }
-        public long? Time { get; internal set; }
-        public long? RowOrder { get; internal set; }
+        public string? Source { get; set; }
+        public long Id { get; set; }
+        public long? Time { get; set; }
+        public long? RowOrder { get; set; }
 
         public static bool IsTreasurePart(long? talkId)
         {
@@ -149,20 +150,20 @@ namespace LmmPlanner.Data.Entities
     public class MeetingAssignmentInfo
     {
         public long AssignmentId { get; set; }
-        public long? ScheduleId { get; internal set; }
-        public string AssistantPerson { get; internal set; } = string.Empty;
-        public string MainPerson { get; internal set; } = string.Empty;
-        public long? Classnumber { get; internal set; }
+        public long? ScheduleId { get; set; }
+        public string AssistantPerson { get; set; } = string.Empty;
+        public string MainPerson { get; set; } = string.Empty;
+        public long? Classnumber { get; set; }
     }
 
     public class FittingPersons
     {
         public long ScheduleId { get; set; }
-        public long? TalkId { get; internal set; }
-        public PartType PartInfo { get; internal set; }
-        public List<LmmPerson> Persons { get; internal set; } = new();
-        public string? Theme { get; internal set; }
-        public bool Assist { get; internal set; }
+        public long? TalkId { get; set; }
+        public PartType PartInfo { get; set; }
+        public List<LmmPerson> Persons { get; set; } = new();
+        public string? Theme { get; set; }
+        public bool Assist { get; set; }
         public long? AssignmentId { get; set; }
     }
 }

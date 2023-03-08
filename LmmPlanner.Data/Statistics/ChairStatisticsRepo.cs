@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using LmmPlanner.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using LmmPlanner.Data.Helper;
+using LmmPlanner.Entities.Models;
+using LmmPlanner.Entities.Interfaces;
 
 namespace LmmPlanner.Data.Statistics
 {
@@ -190,7 +192,7 @@ namespace LmmPlanner.Data.Statistics
                     {
                         continue;
                     }
-                    string typeName = "";
+                    string typeName = ExceptionHelper.TypeToString(item.Type);
                     switch (item.Type)
                     {
                         case 1:
@@ -219,11 +221,6 @@ namespace LmmPlanner.Data.Statistics
         }
     }
 
-    public interface IChairStatisticsRepo
-    {
-        Task<List<ChairOverview>> GetChairOverview(DateTime from, DateTime to);
-        Task<List<PartOverviewMeeting>> GetPartOverview(DateTime from, DateTime to, PartType partType);
-        Task<List<AssignmentOverviewMeeting>> GetCompleteOverview(DateTime from, DateTime to, List<long?> personIds);
-    }
+
 
 }

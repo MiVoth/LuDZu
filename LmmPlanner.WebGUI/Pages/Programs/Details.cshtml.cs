@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LmmPlanner.Data;
-using LmmPlanner.Data.Entities;
-using Microsoft.AspNetCore.Mvc;
+using LmmPlanner.Entities.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 

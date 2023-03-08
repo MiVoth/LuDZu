@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using LmmPlanner.Data;
-using LmmPlanner.Data.Entities;
-using LmmPlanner.Data.Statistics;
+using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Models;
 using LmmPlanner.WebGUI.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 
 namespace LmmPlanner.WebGUI.Pages;
@@ -42,8 +37,8 @@ public class ScheduleModel : BasePageModel
 
 
         Meeting = await scheduleRepo.GetSchedule(ActiveDate); //.GetAllPersons();
-        string html = await new Export.ExportService(_settingsRepo, scheduleRepo).Export();
-        HtmlExport = html;
+        // string html = await new Export.ExportService(_settingsRepo, scheduleRepo).Export();
+        // HtmlExport = html;
     }
 
     public async Task OnPost(DateTime? date)

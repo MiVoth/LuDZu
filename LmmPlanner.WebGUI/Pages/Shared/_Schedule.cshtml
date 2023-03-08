@@ -1,11 +1,11 @@
-﻿@model LmmPlanner.Data.Entities.MeetingInfo
+﻿@model LmmPlanner.Entities.Models.MeetingInfo
 @{
     Layout = null;
     bool moreClasses = Model.MoreClasses;
     string firtColClass = moreClasses ? "col-md-6" : "col-md-9";
     string colClass = moreClasses ? "col-md-6" : "col-md-3";
 }
-@using LmmPlanner.Data.Entities
+@using LmmPlanner.Entities.Models
 @using LmmPlanner.WebGUI.Helpers
 
 
@@ -21,6 +21,12 @@
         </a>
         <small><i>(@Model.MeetingDate?.AddDays(4).ToShortDateString())</i></small>
     </h1>
+    @if(!string.IsNullOrEmpty(Model.Alert)) 
+    {
+        <div class="alert alert-info">
+            @Model.Alert
+        </div>
+    }
     <h2>@Model.BibleReading</h2>
     <div class="row mb-2">
         <div class="@firtColClass"><span class="theme">Lied @Model.SongBeginning und Gebet</span></div>

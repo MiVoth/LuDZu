@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using LmmPlanner.Data.Statistics;
 using LmmPlanner.Data.TheocData;
+using LmmPlanner.Entities.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

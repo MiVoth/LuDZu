@@ -1,0 +1,36 @@
+﻿@page "{personId:long}"
+@model PlanModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    Plan
+</div>
+
+<form method="post">
+    <div>
+        <label asp-for="StartDate">Von</label>
+        <input class="form-control" asp-for="StartDate" />
+    </div>
+
+    <div>
+        <label asp-for="EndDate">Bis</label>
+        <input class="form-control" asp-for="EndDate" />
+    </div>
+
+    <div>
+        <button type="submit">
+            <i class="bi bi-save2" aria-hidden="t"></i>
+            Download Export
+        </button>
+    </div>
+</form>
+
+<div>
+    <iframe id="myIframe"></iframe>
+</div>
+
+@section Scripts {
+    <script src="~/js/export.js" asp-append-version="true"></script>
+}

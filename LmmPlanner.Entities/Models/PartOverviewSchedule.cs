@@ -1,12 +1,12 @@
 using System;
 
-namespace LmmPlanner.Data.Entities
+namespace LmmPlanner.Entities.Models
 {
     public class PartOverviewSchedule
     {
         public long Id { get; set; }
         public DateTime? Date { get; set; }
-        public long? AssigneeId { get; internal set; }
-        public long? AssigneeId2 { get; internal set; }
+        public long? AssigneeId { get; set; }
+        public long? AssigneeId2 { get; set; }
     }
 }

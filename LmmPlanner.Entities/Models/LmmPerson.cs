@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LmmPlanner.Data.Entities
+namespace LmmPlanner.Entities.Models
 {
     public class LmmPerson
     {
-        public long Id { get; internal set; }
-        // public bool? Active { get; internal set; }
-        public long? CongregationId { get; internal set; }
-        public string? Firstname { get; internal set; }
-        public string? Lastname { get; internal set; }
+        public long Id { get; set; }
+        // public bool? Active { get; set; }
+        public long? CongregationId { get; set; }
+        public string? Firstname { get; set; }
+        public string? Lastname { get; set; }
         public string Name { get => $"{Firstname} {Lastname}"; }
         public string? Gender { get; set; }
-        public DateTime? LastAssignmentDb { get; set; }
+        // public DateTime? LastAssignmentDb { get; set; }
         public DateTime? LastAssignment { get => LastAssignments.OrderByDescending(d => d.Date).FirstOrDefault()?.Date; }
-        public long? UseFor { get; internal set; }
+        public long? UseFor { get; set; }
         public string UseForString
         {
             get
@@ -81,21 +81,21 @@ namespace LmmPlanner.Data.Entities
         public bool IsInvitationHost { get => UseForString[5] == '1'; }
         public bool IsStudyTalk { get => UseForString[4] == '1'; }
         public bool IsVideoPart { get => UseForString[3] == '1'; }
-        public List<LmmPersonAssignment> LastAssignments { get; internal set; } = new();
-        public IEnumerable<long> LastAssignmentIds { get; internal set; } = new List<long>();
-        public bool IsElder { get; internal set; }
-        public bool IsServant { get; internal set; }
+        public List<LmmPersonAssignment> LastAssignments { get; set; } = new();
+        public IEnumerable<long>? LastAssignmentIds { get; set; } = new List<long>();
+        public bool IsElder { get; set; }
+        public bool IsServant { get; set; }
     }
 
     public class LmmPersonAssignment
     {
-        public string Main { get; internal set; } = string.Empty;
-        public string Assist { get; internal set; } = string.Empty;
-        public DateTime? Date { get; internal set; }
-        public string? Theme { get; internal set; }
-        public long? AssigneeId { get; internal set; }
-        public long? VolunteerId { get; internal set; }
-        public long? AssistantId { get; internal set; }
-        public string Volu { get; internal set; } = string.Empty;
+        public string Main { get; set; } = string.Empty;
+        public string Assist { get; set; } = string.Empty;
+        public DateTime? Date { get; set; }
+        public string? Theme { get; set; }
+        public long? AssigneeId { get; set; }
+        public long? VolunteerId { get; set; }
+        public long? AssistantId { get; set; }
+        public string Volu { get; set; } = string.Empty;
     }
 }

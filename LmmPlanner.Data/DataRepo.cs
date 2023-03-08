@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LmmPlanner.Data.Entities;
+using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LmmPlanner.Data;
-
-public interface IDataRepo
-{
-    Task<List<LmmAssignmentInfo>> GetAllAssignmentsOfPerson(long personId);
-    Task<List<LmmPerson>> GetAllPersons();
-    Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date);
-    Task<LmmPerson> GetPerson(long personId);
-}
 
 public class DataRepo : IDataRepo
 {
@@ -62,9 +55,9 @@ public class DataRepo : IDataRepo
             Gender = p.Gender,
             UseFor = p.Usefor,
             // LastAssignmentDb = p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault() : null,
-            LastAssignmentDb = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault(),
-            LastAssignmentIds = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id),
-            // LastAssignmentIds = p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id) : new List<long>(),
+            // LastAssignmentDb = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Select(d => d.Date).FirstOrDefault(),
+            // LastAssignmentIds = p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id),
+            LastAssignmentIds = p.AssignmentsAsMain != null ? p.AssignmentsAsMain.OrderByDescending(d => d.Date).Take(3).Select(d => d.Id) : null,
 
             // LastAssignments = p.AssignmentsAsMain.OrderByDescending(d => d.Id).Take(3)
             // .Select(a => new LmmPersonAssignment {
