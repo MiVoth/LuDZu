@@ -1,5 +1,5 @@
 ﻿@page "{personId:long}"
-@model DetailsModel
+@model PublisherDetailsModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -8,8 +8,8 @@
     <h1 class="display-4">Details zu @Model.ActivePerson.Name</h1>
 </div>
 
-<div>
-    <dl class="row">
+<div class="">
+    <dl class="row col">
         <dt class="col-md-3">Name</dt>
         <dd class="col-md-9">@Model.ActivePerson.Name</dd>
 
@@ -17,18 +17,21 @@
         <dd class="col-md-9">
             <table>
                 <tr>
-                    @for(int i = 0; i < Model.ActivePerson.UseForString.Length; i++) {
+                    @for (int i = 0; i < Model.ActivePerson.UseForString.Length; i++)
+                    {
                         <th>@i</th>
                     }
                 </tr>
                 <tr>
-                    @for(int i = 0; i < Model.ActivePerson.UseForString.Length; i++) {
+                    @for (int i = 0; i < Model.ActivePerson.UseForString.Length; i++)
+                    {
                         <td>@Model.ActivePerson.UseForString[i]</td>
                     }
                 </tr>
             </table>
         </dd>
-
+    </dl>
+    <dl class="row col">
         <dt class="col-md-3">Partner</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="Model.ActivePerson.IsPartner"></bool-icon>
@@ -97,34 +100,74 @@
         <dt class="col-md-3">VBS-Leser</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="@Model.ActivePerson.IsCongregationStudyReader"></bool-icon>
-        </dd>   
-</dl>
-<dl class="row">
+        </dd>
+    </dl>
+    <dl class="row col">
         <dt class="col-md-3">Wachtturm-Leiter</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="@Model.ActivePerson.IsWtHost"></bool-icon>
-        </dd>    
+        </dd>
 
         <dt class="col-md-3">Wachtturm-Leser</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="@Model.ActivePerson.IsWtReader"></bool-icon>
-        </dd>              
+        </dd>
     </dl>
-</div>
-<dl class="row">
+    <dl class="row">
         <dt class="col-md-3">Vorsitz (ÖV)</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="@Model.ActivePerson.IsPublicTalkChair"></bool-icon>
-        </dd>    
+        </dd>
 
         <dt class="col-md-3">Öffentliche Vorträge</dt>
         <dd class="col-md-9">
             <bool-icon is-checked="@Model.ActivePerson.IsPublicTalk"></bool-icon>
-        </dd>              
+        </dd>
     </dl>
 </div>
 
-<div>
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Nicht verfügbar</div>
+    </div>
+    <div class="card-body1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Aktiv</th>
+                    <th>Von</th>
+                    <th>Bis</th>
+                    <th>Aktion</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var unavail in Model.PersonExceptions)
+                {
+                    <tr>
+                        <td>@unavail.Active</td>
+                        <td>@unavail.From</td>
+                        <td>@unavail.To</td>
+                        <td>
+                            <a asp-page="./EditUnavailable" asp-route-id="@unavail.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a asp-page="./CreateUnavailable" class="btn btn-outline-dark">
+            <i class="bi bi-plus-circle" aria-hidden="true"></i>
+            Neue Ausnahme
+        </a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Zuteilungen</div>
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -148,19 +191,13 @@
                     <td>@item.Theme
                         @if (!string.IsNullOrEmpty(item.Source))
                         {
-                            <br><small>@item.Source</small>
+                            <br>
+
+                            <small>@item.Source</small>
                         }
                     </td>
                     <td>@item.StudyNumber</td>
                     <td>@item.TalkId</td>
-                    @* <td>@item.IsActive</td>
-                        <td>@item.Firstname @item.Lastname</td>
-                        <td>@item.LastAssignment</td>
-                        <td>
-                        <a href="#" class="btn btn-sm btn-primary">
-                        <i class="bi bi-pencil" aria-hidden="true"></i>
-                        </a>
-                        </td> *@
                 </tr>
             }
         </tbody>

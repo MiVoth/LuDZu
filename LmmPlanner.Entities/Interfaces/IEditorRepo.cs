@@ -9,6 +9,7 @@ public interface IEditorRepo
     Task<long> NextAssignmentId();
     Task<bool> CommitChanges();
     void Remove(LmmSchedule schedule);
+    Task<Unavailable> GetUnavailability(long id);
     Task<LmmSchedule> GetLmmSchedule(long id);
     Task<LmmAssignment> GetLmmAssignment(long id);
     Task<List<LmmAssignment>> GetLmmScheduleAssignments(long scheduleId);

@@ -60,6 +60,11 @@ namespace LmmPlanner.Data.Statistics
             long id = await ctx.Set<LmmAssignment>().MaxAsync(d => d.Id);
             return id + 1;
         }
+
+        public async Task<Unavailable> GetUnavailability(long id)
+        {
+            return await ctx.Unavailables.FirstAsync(d => d.Id == id);
+        }
     }
 
 }

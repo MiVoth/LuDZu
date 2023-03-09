@@ -67,7 +67,7 @@ public class DataRepo : IDataRepo
             //     Theme = a.LmmSchedule.Theme
             // }).ToList()
             // p.Usefor
-        }).ToListAsync();
+        }).OrderBy(d => d.Lastname).ThenBy(d => d.Firstname).ToListAsync();
         var ids = li.SelectMany(s => s.LastAssignmentIds).ToList();
         var lmmAssign = await ctx.LmmAssignments.Where(d => ids.Contains(d.Id))
             .Select(a => new LmmPersonAssignment
@@ -107,6 +107,22 @@ public class DataRepo : IDataRepo
             // LastAssignment = p.AssignmentsAsMain.OrderByDescending(d => d.Id).FirstOrDefault().LmmScheduleId
             // p.Usefor
         }).FirstOrDefaultAsync() ?? new();
+        return li;
+    }
+
+    public async Task<List<PersonNotAvailable>> GetPersonNotAvailableAsync(long personId)
+    {
+        var li = await ctx.Unavailables
+        .Where(p => p.PersonId == personId)
+        .OrderBy(d => d.StartDate).ThenBy(d => d.EndDate)
+        .Select(p => new PersonNotAvailable
+        {
+            Id = p.Id,
+            PersonId = p.PersonId ?? personId,
+            From = p.StartDate,
+            To = p.EndDate,
+            Active = p.Active == true
+        }).ToListAsync();
         return li;
     }
 

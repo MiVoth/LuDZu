@@ -1,0 +1,43 @@
+@page "{id:long}"
+@model EditUnavailableModel
+@{
+    ViewData["Title"] = "Bearbeiten";
+}
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form method="post" class="col-lg-4 col-md-6">
+    <input type="hidden" asp-for="ActiveEntity.Id" />
+    <input type="hidden" asp-for="ActiveEntity.PersonId" />
+    <div class="mb-2">
+        <label asp-for="ActiveEntity.Active" class="form-check-label">
+            <input asp-for="ActiveEntity.Active" class="form-check">
+        </label>
+    </div>
+    <div class="row mb-2">
+    <div class="col-md-6">
+        <label asp-for="ActiveEntity.From" class="col-form-label"></label>
+        <input asp-for="ActiveEntity.From" class="form-control" type="date">
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ActiveEntity.To" class="col-form-label"></label>
+        <input asp-for="ActiveEntity.To" class="form-control" type="date">
+    </div>
+    </div>
+    <hr/>
+    <p>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save" aria-hidden="true"></i>
+            Speichern
+        </button>
+
+        @* <button type="submit" class="btn btn-danger" asp-page-handler="Delete">
+        <i class="bi bi-trash" aria-hidden="true"></i>
+        Löschen
+        </button> *@
+    </p>
+</form>
+<a asp-page="./Index" asp-route-id="@Model.ActiveEntity.PersonId" class="btn btn-secondary">
+    <i class="bi bi-arrow-left-circle" aria-hidden="true"></i>
+    Zurück
+</a>

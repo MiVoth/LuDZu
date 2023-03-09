@@ -11,4 +11,6 @@ public interface IDataRepo
     Task<List<LmmPerson>> GetAllPersons();
     Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date);
     Task<LmmPerson> GetPerson(long personId);
+
+    Task<List<PersonNotAvailable>> GetPersonNotAvailableAsync(long personId);
 }
