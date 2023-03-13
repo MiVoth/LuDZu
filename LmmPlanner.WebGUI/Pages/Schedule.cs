@@ -11,14 +11,17 @@ namespace LmmPlanner.WebGUI.Pages;
 public class ScheduleModel : BasePageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
+    private readonly IFormFillerService _formFillerService;
     private readonly ISettingsRepo _settingsRepo;
     private readonly IScheduleRepo scheduleRepo;
 
     public ScheduleModel(ILogger<ScheduleModel> logger,
     ISettingsRepo settingsRepo,
+    IFormFillerService formFillerService,
     IScheduleRepo scheduleRepo)
     {
         _logger = logger;
+        _formFillerService = formFillerService;
         _settingsRepo = settingsRepo;
         this.scheduleRepo = scheduleRepo;
     }
@@ -64,6 +67,20 @@ public class ScheduleModel : BasePageModel
         r.AssignmentId = assignmentId;
 
         return PartialView("_PersonListing", r);
+        // return new JsonResult(r);
+    }
+
+    public JsonResult OnGetExportS89(DateTime exportdate)
+    {
+        _formFillerService.Export(exportdate, exportdate.AddDays(7));
+        return new JsonResult(new
+        {
+
+        });
+        // FittingPersons r = await scheduleRepo.GetPersonsToPart(partId, assist);
+        // r.AssignmentId = assignmentId;
+
+        // return PartialView("_PersonListing", r);
         // return new JsonResult(r);
     }
 }

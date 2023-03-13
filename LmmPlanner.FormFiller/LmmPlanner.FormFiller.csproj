@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>LmmFormFiller</AssemblyName>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="CarloSharp" Version="1.0.7" /> -->
+      <ProjectReference Include="..\LmmPlanner.Entities\LmmPlanner.Entities.csproj" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.8.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.7" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="11.3.0" />
+    <!-- <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.4.5" /> -->
+    <!-- <PackageReference Include="NETStandard.Library" Version="2.0.3" /> -->
+    <!-- <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <none Remove="appsettings.json" />
+    <content Include="appsettings.json">
+      <copytooutputdirectory>PreserveNewest</copytooutputdirectory>
+    </content>
+    <content Include="Beispiel.xlsx">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
+    <content Include="abfrage.sql">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
+    <content Include="anschreiben.txt">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
+    <!-- <content Include="Server/wwwroot/*" CopyToPublishDirectory="PreserveNewest">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
+    <content Include="Server/wwwroot/js/*">
+      <copytooutputdirectory>PreserveNewest</copytooutputdirectory>
+    </content>
+    <content Include="Server/wwwroot/css/*">
+      <copytooutputdirectory>PreserveNewest</copytooutputdirectory>
+    </content> -->
+  </ItemGroup>
+</Project>

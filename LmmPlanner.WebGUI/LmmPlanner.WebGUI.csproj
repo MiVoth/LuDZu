@@ -2,16 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <version>0.5.0.0</version>
+    <version>0.5.1.0</version>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LmmPlanner.FormFiller\LmmPlanner.FormFiller.csproj" />
     <ProjectReference Include="..\LmmPlanner.Entities\LmmPlanner.Entities.csproj" />
     <ProjectReference Include="..\LmmPlanner.Data\LmmPlanner.Data.csproj" />
     <ProjectReference Include="..\LmmPlanner.Business\LmmPlanner.Business.csproj" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="MiVo.Text.Replacer" Version="0.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <content Include="App_Data/abfrage.sql">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
+    <content Include="App_Data/anschreiben.txt">
+      <copytooutputdirectory>Always</copytooutputdirectory>
+    </content>
   </ItemGroup>
 </Project>

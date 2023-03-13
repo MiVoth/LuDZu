@@ -63,7 +63,7 @@ namespace LmmPlanner.WebGUI.Pages.Programs
                         Id = await _editorRepo.NextAssignmentId(),
                         AssigneeId = assigneeId,
                         Classnumber = 1,
-                        Date = original.Date?.AddDays(4),
+                        Date = original.Date, //?.AddDays(4),
                         LmmScheduleId = partId,
                         TimeStamp = DateTime.Now.ToFileTimeUtc(),
                         Uuid = $"{Guid.NewGuid()}"

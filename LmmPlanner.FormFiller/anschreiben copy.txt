@@ -1,0 +1,9 @@
+Hallo [*Vorname*],
+du wurdest für [*Art*] am [*Datum*] eingeteilt.
+[*Partner*]
+Bitte gib kurz Rückmeldung, ob du die Aufgabe erhalten hast und übernehmen kannst.
+
+Falls [*DuPartner*] die Aufgabe später doch nicht durchführen kannst, gib mir bitte Bescheid, damit ich für Ersatz sorgen kann. :)
+
+Danke, liebe Grüße und Jehovas Segen für die Ausarbeitung,
+Michael :)

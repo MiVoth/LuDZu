@@ -22,6 +22,8 @@ public class Program
         {
             LmmConnectionString = builder.Configuration.GetSection("AppSettings")["LmmConnectionString"]
         };
+            string s89Path = builder.Configuration.GetSection("AppSettings")["S89-Path"];
+            string exportPath = builder.Configuration.GetSection("AppSettings")["Export-Path"];
         builder.Services.AddSingleton<AppSettings>(sp => appSettings);
         builder.Services.AddScoped<MyContext>();
         builder.Services.AddScoped<DataRepo>();
@@ -32,6 +34,8 @@ public class Program
         builder.Services.AddScoped<IEditorRepo, EditorRepo>();
         builder.Services.AddScoped<IScheduleRepo, ScheduleRepo>();
         builder.Services.AddScoped<IExportService, ExportService>();
+        builder.Services.AddScoped<IFormFillerService>(a => 
+        new LmmPlanner.LmmFormFiller.FormFillerService(appSettings.LmmConnectionString, s89Path, exportPath));
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
