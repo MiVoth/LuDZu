@@ -11,7 +11,7 @@
 	<meta name="author" content="Stephan Strauch">
 	<meta name="version" content="5.0.1">
 	<title>Midweek Meeting Schedule (colorful)</title>
-	<link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed|Lato:400,400i,700" rel="stylesheet">
+	<!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed|Lato:400,400i,700" rel="stylesheet"> -->
 	<!--<script>
 		if (!PAPERHEIGHT!==431.8) {document.write('<style type="text/css">section#header:nth-of-type(3n+2), section#header:nth-of-type(3n+3) { display: none; } div#week:nth-of-type(3n+3) { page-break-after: always; }</style>')}
 		if (!PAPERHEIGHT!==355.6 || !PAPERHEIGHT!==297 || !PAPERHEIGHT!==279.4) {document.write('<style type="text/css">section#header:nth-of-type(2n+2) { display: none; } div#week:nth-of-type(2n+2) { page-break-after: always; }</style>')}
@@ -48,9 +48,9 @@
 		.clb       { background-color: rgba(153, 19, 30, 1); }
 		.clb50     { background-color: rgba(153, 19, 30, 0.5); }
 		.cob       { background-color: #333333; }
-		#gw        { margin: 0 3.000rem; /*background-color: rgba(101, 97, 100, 0.1); */}
-		#fm        { margin: 0.250rem 3.000rem; /* background-color: rgba(199, 137, 9, 0.1); */ }
-		#cl        { margin: 0 3.000rem; /*background-color: rgba(153, 19, 30, 0.1); */}
+		#gw        { margin: 0 3.000rem; background-color: rgba(101, 97, 100, 0.1); }
+		#fm        { margin: 0.250rem 3.000rem; background-color: rgba(199, 137, 9, 0.1); }
+		#cl        { margin: 0 3.000rem; background-color: rgba(153, 19, 30, 0.1); }
 		#other     { margin: 0.250rem 3.000rem; }
 		body {		
 					width: 22cm;}
@@ -78,12 +78,17 @@
 						<td class="mwbColor" style="height: 2.000rem;">
 							<!--#IF !DURATION!#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>#ENDIF#
 							#IF !DURATION! EMPTY#<h3 style="text-align: left; margin-left: 0.500rem;">!DATE!#IF !EXCEPTION!# — !EXCEPTION!#ELSEIF !CONVENTION!# — !EXCEPTION! (!NO_MEETING!)#ENDIF#</h3>#ENDIF# -->
-							<h3 style="text-align: left; margin-left: 0.500rem;" data-replace="MeetingDate">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>
-							
+							<div data-hide="Alert">
+								<h3 style="text-align: left; margin-left: 0.500rem;" data-replace="MeetingDate">!DATE!#IF !EXCEPTION!# — !BEGIN! !LM_STARTTIME! (!EXCEPTION!)#ELSEIF !CONVENTION!# — !NO_MEETING! (!EXCEPTION!)#ELSE# — !BEGIN! !LM_STARTTIME!#ENDIF#</h3>
+							</div>
+							<div data-show="Alert">
+								<h3 style="text-align: left; margin-left: 0.500rem;" data-replace="Alert"></h3>
+							</div>
 						</td>
 					</tr>
 				</table>
 			</div>
+			<div data-hide="Alert">
 			<!--<p>#IF !NO_MEETING_EXCEPTION! EMPTY#</p>-->
 			<div id="other">
 				<table>
@@ -307,6 +312,7 @@
 					</tr>
 				</table>
 			</div>
+		</div>
 			<!--<p>#ENDIF#</p>-->
 		</div>
 		<!--<p>!REPEAT_END!</p>-->

@@ -39,8 +39,9 @@ namespace LmmPlanner.Data
                 PrayerEndId = d.PrayerEnd,
                 PrayerEnd = d.PrayerEndPerson != null ? d.PrayerEndPerson.Firstname + " " + d.PrayerEndPerson.Lastname : "",
             }).FirstOrDefaultAsync();
-            if(schd == null) {
-                schd = new();
+            if (schd == null)
+            {
+                schd = new() { MeetingDate = myTime };
             }
             List<MeetingPartInfo> parts = await db.LmmSchedules
             .Where(d => d.Date >= myTime.AddDays(-1) && d.Date <= myTime.AddDays(6))
@@ -77,7 +78,14 @@ namespace LmmPlanner.Data
             if (exeption.Any())
             {
                 var exc = exeption.First();
-                schd.Alert = $"{ExceptionHelper.TypeToString(exc.Type)} - {exc.Date:dd.MM.yyyy} - {exc.Date2:dd.MM.yyyy}";
+                if (exc.Date != exc.Date2)
+                {
+                    schd.Alert = $"{exc.Date:dd.MM.yyyy} - {exc.Date2:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
+                }
+                else
+                {
+                    schd.Alert = $"{exc.Date:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
+                }
             }
             return schd;
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LmmPlanner.Data.TheocData;
 using LmmPlanner.Entities.Interfaces;
 using LmmPlanner.Entities.Models;
+using MiVo.Text.Replacer.Interfaces;
 using PuppeteerSharp;
 
 namespace LmmPlanner.Business.Services
@@ -26,10 +27,11 @@ namespace LmmPlanner.Business.Services
 
             using var browserFetcher = new BrowserFetcher();
             await browserFetcher.DownloadAsync();
-            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true, Args = new[] {
-                // "--font-render-hinting=none'",
-                "--force-color-profile=srgb"
-            } });
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true});
+            // , Args = new[] {
+            //     // "--font-render-hinting=none'",
+            //     "--force-color-profile=srgb"
+            // } });
             await using var page = await browser.NewPageAsync();
             await page.SetUserAgentAsync("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36");
             // await page.GoToAsync("http://www.google.com"); // In case of fonts being loaded from a CDN, use WaitUntilNavigation.Networkidle0 as a second param.
@@ -40,7 +42,8 @@ namespace LmmPlanner.Business.Services
             await page.SetContentAsync(html);
             await page.GetContentAsync();
             return await page.PdfDataAsync(new PdfOptions {
-                PrintBackground = true
+                PrintBackground = true,
+                Format = PuppeteerSharp.Media.PaperFormat.A4
             });
             // var result = await page.GetContentAsync();
 
@@ -61,14 +64,14 @@ namespace LmmPlanner.Business.Services
         {
             // var rpl = new DocumentForger.Replacer(System.IO.File.ReadAllText(@"App_Data\MW-Schedule_1.htm"));
             string template = System.IO.File.ReadAllText(@"App_Data\MW-Schedule_1.htm");
-            var rpl = MiVo.Text.Replacer.ReplacerFactory.GetReplacer(template, new MiVo.Text.Replacer.ReplacerConfig
+            IReplacer rpl = MiVo.Text.Replacer.ReplacerFactory.GetReplacer(template, new MiVo.Text.Replacer.ReplacerConfig
             {
                 ReplacePattern = "\"*{0}*\""
             }); // DocumentForger.Replacer();
             // rpl.ReplacePattern = "\"*{0}*\"";
-            var Meeting = await scheduleRepo.GetSchedule(start); //.GetAllPersons();
+            MeetingInfo Meeting = await scheduleRepo.GetSchedule(start); //.GetAllPersons();
 
-            var exp = await GetExportAsync(Meeting);
+            ScheduleExport exp = await GetExportAsync(Meeting);
             List<ScheduleExport> schedList = new() {
                 exp
             };
@@ -80,26 +83,9 @@ namespace LmmPlanner.Business.Services
                 exp = await GetExportAsync(Meeting);
                 schedList.Add(exp);
             }
-            // Meeting = await scheduleRepo.GetSchedule(ActiveDate.AddDays(14)); //.GetAllPersons();
-            // exp = await GetExportAsync(Meeting);
-            // schedList.Add(exp);
-            // rpl.ReplacementRelation.Add("treasure-template", new DocumentForger.Replacement
-            // {
-            //     Type = DocumentForger.ReplacementType.Template,
-            //     Value = exp.TreasureExport.ToList()
-            // });
-            // rpl.ReplacementRelation.Add("service-template", new DocumentForger.Replacement
-            // {
-            //     Type = DocumentForger.ReplacementType.Template,
-            //     Value = exp.ServiceExport.ToList()
-            // });
-            // rpl.ReplacementRelation.Add("life-template", new DocumentForger.Replacement
-            // {
-            //     Type = DocumentForger.ReplacementType.Template,
-            //     Value = exp.LifeExport.ToList()
-            // });
-            var color = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",")[2];
-
+            
+            string color = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",")[start.Month];
+            // var color2 = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",");
             int RGBint = Convert.ToInt32(color.Replace("#", ""), 16);
             byte Red = (byte)((RGBint >> 16) & 255);
             byte Green = (byte)((RGBint >> 8) & 255);
@@ -107,7 +93,8 @@ namespace LmmPlanner.Business.Services
 
             string html = rpl.GetText(new
             {
-                CongregationTitle = "Leben und Dienst Zusammenkunft",
+                // CongregationTitle = "Leben und Dienst Zusammenkunft",
+                CongregationTitle = "Versammlung Schongau",
                 MeetingName = "Zusammenkunft unter der Woche",
                 MWB_COLOR = $"rgb({Red},{Green},{Blue})",
                 MWB_COLOR_LIGHT = $"rgb({Red},{Green},{Blue}, .3)",
@@ -136,7 +123,7 @@ namespace LmmPlanner.Business.Services
             DateTime meetingTime = DateTime.Parse(cong.Meeting1Time ?? "").AddMinutes(6);
             long i = 0;
             Func<long, DateTime> abc = f => { var mt = meetingTime.AddMinutes(i); i += f; return mt; };
-            var treasureParts = Meeting.TreasureParts.OrderBy(f => f.RowOrder).Select(f => new TreasureExport
+            IEnumerable<TreasureExport> treasureParts = Meeting.TreasureParts.OrderBy(f => f.RowOrder).Select(f => new TreasureExport
             {
                 TreasureTime = $"{abc(f.Time ?? 0):HH:mm}", // f.Time,
                 TreasureTheme = f.Theme,
@@ -162,7 +149,7 @@ namespace LmmPlanner.Business.Services
                 LifeAssist = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.AssistantPerson
             });
 
-            var lst = lifeParts.Last();
+            // var lst = lifeParts.Last();
             return new ScheduleExport
             {
                 MeetingDate = meetingDate, // Meeting.MeetingDate,
@@ -191,7 +178,8 @@ namespace LmmPlanner.Business.Services
                 WeekSource = Meeting.BibleReading,
                 LifeExport = lifeParts,
                 ServiceExport = serviceParts,
-                TreasureExport = treasureParts
+                TreasureExport = treasureParts,
+                Alert = Meeting.Alert
             };
         }
     }

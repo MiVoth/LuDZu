@@ -35,6 +35,7 @@ namespace LmmPlanner.Entities.Models
         public IEnumerable<LifeExport> LifeExport { get; set; } = new List<LifeExport>();
         public IEnumerable<ServiceExport> ServiceExport { get; set; } = new List<ServiceExport>();
         public IEnumerable<TreasureExport> TreasureExport { get; set; } = new List<TreasureExport>();
+        public string? Alert { get; set; }
     }
 
     public class LifeExport
