@@ -6,6 +6,7 @@ using LmmPlanner.Entities.Models;
 using LmmPlanner.Data.Helper;
 using Microsoft.EntityFrameworkCore;
 using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Enums;
 
 namespace LmmPlanner.Data
 {
@@ -19,9 +20,10 @@ namespace LmmPlanner.Data
 
         public async Task<MeetingInfo> GetSchedule(DateTime now)
         {
-            DateTime myTime = (int)now.DayOfWeek == 1 ? now : now.AddDays(-1 * (int)now.DayOfWeek);
-            MeetingInfo? schd = await db.LmmMeetings
-            .Where(lm => lm.Date >= myTime.AddDays(-1) && lm.Date <= myTime.AddDays(6) && lm.Active == true)
+            DateTime myTimeStart = now.DayOfWeek == DayOfWeek.Monday ? now : now.AddDays(-1 * ((int)now.DayOfWeek - 1));
+            DateTime myTimeEnd = myTimeStart.AddDays(6);
+            MeetingInfo? activeSchedule = await db.LmmMeetings
+            .Where(lm => lm.Date >= myTimeStart.AddDays(-1) && lm.Date <= myTimeEnd && lm.Active == true)
             .OrderBy(d => d.Date)
             .Select(d => new MeetingInfo
             {
@@ -39,12 +41,12 @@ namespace LmmPlanner.Data
                 PrayerEndId = d.PrayerEnd,
                 PrayerEnd = d.PrayerEndPerson != null ? d.PrayerEndPerson.Firstname + " " + d.PrayerEndPerson.Lastname : "",
             }).FirstOrDefaultAsync();
-            if (schd == null)
+            if (activeSchedule == null)
             {
-                schd = new() { MeetingDate = myTime };
+                activeSchedule = new() { MeetingDate = myTimeStart };
             }
             List<MeetingPartInfo> parts = await db.LmmSchedules
-            .Where(d => d.Date >= myTime.AddDays(-1) && d.Date <= myTime.AddDays(6))
+            .Where(d => d.Date >= myTimeStart.AddDays(-1) && d.Date <= myTimeEnd)
             .OrderBy(d => d.Roworder)
             .Select(d => new MeetingPartInfo
             {
@@ -71,23 +73,25 @@ namespace LmmPlanner.Data
                 AssistantPerson = d.AssistantPerson == null ? "" : d.AssistantPerson.Firstname + " " + d.AssistantPerson.Lastname
             })
             .ToListAsync();
-            schd.AssignmentInfos = asmnt;
-            schd.PartInfos = parts;
+            activeSchedule.AssignmentInfos = asmnt;
+            activeSchedule.PartInfos = parts;
 
-            List<TheocData.Exception> exeption = await db.Exceptions.Where(d => d.Active == true && d.Date >= myTime.AddDays(-1) && d.Date <= myTime.AddDays(6)).ToListAsync();
+            List<TheocData.Exception> exeption = await db.Exceptions.Where(d => d.Active == true && d.Date >= myTimeStart.AddDays(-1) && d.Date <= myTimeEnd).ToListAsync();
             if (exeption.Any())
             {
                 var exc = exeption.First();
+                activeSchedule.ExceptionVariant = (ExceptionVariant)(exc.Type ?? 6); // ?? ExceptionVariant.Unknown ;
                 if (exc.Date != exc.Date2)
                 {
-                    schd.Alert = $"{exc.Date:dd.MM.yyyy} - {exc.Date2:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
+                    activeSchedule.Alert = $"{exc.Date:dd.MM.yyyy} - {exc.Date2:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
                 }
                 else
                 {
-                    schd.Alert = $"{exc.Date:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
+                    activeSchedule.Alert = $"{exc.Date:dd.MM.yyyy} - {ExceptionHelper.TypeToString(exc.Type)}";
                 }
             }
-            return schd;
+            activeSchedule.CircuitOverseer = db.Settings.First(c => c.Name == "circuitoverseer").Value;
+            return activeSchedule;
         }
 
         public async Task<FittingPersons> GetPersonsToPart(long partId, bool assist)

@@ -69,19 +69,20 @@ namespace LmmPlanner.Business.Services
                 ReplacePattern = "\"*{0}*\""
             }); // DocumentForger.Replacer();
             // rpl.ReplacePattern = "\"*{0}*\"";
-            MeetingInfo Meeting = await scheduleRepo.GetSchedule(start); //.GetAllPersons();
+            // MeetingInfo Meeting = await scheduleRepo.GetSchedule(start); //.GetAllPersons();
 
-            ScheduleExport exp = await GetExportAsync(Meeting);
-            List<ScheduleExport> schedList = new() {
-                exp
-            };
+            // ScheduleExport exp = await GetExportAsync(Meeting);
+            List<ScheduleExport> schedList = new();
+            //  {
+            //     exp
+            // };
             DateTime newDate = start;
             while (newDate < end)
             {
-                newDate = newDate.AddDays(7);
-                Meeting = await scheduleRepo.GetSchedule(newDate); //.GetAllPersons();
-                exp = await GetExportAsync(Meeting);
+                MeetingInfo Meeting = await scheduleRepo.GetSchedule(newDate); //.GetAllPersons();
+                ScheduleExport exp = await GetExportAsync(Meeting);
                 schedList.Add(exp);
+                newDate = newDate.AddDays(7);
             }
             
             string color = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",")[start.Month];
@@ -179,7 +180,8 @@ namespace LmmPlanner.Business.Services
                 LifeExport = lifeParts,
                 ServiceExport = serviceParts,
                 TreasureExport = treasureParts,
-                Alert = Meeting.Alert
+                Alert = Meeting.Alert,
+                ShowSchedule =  Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.NoException ||  Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.ServiceWeek
             };
         }
     }

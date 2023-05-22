@@ -52,9 +52,13 @@
                 <div class="@firtColClass">
                     <span class="theme">
                         @item.Theme </span> (@item.Time Min): <br>
+                    <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id" class="btn btn-xs btn-outline-secondary">
+                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                    </a>
                     @if (PartTypeStatics.BibleReading.IsBetween(item.TalkId ?? 0))
                     {
-                        <small><a href="https://wol.jw.org/de/wol/l/r10/lp-x?q=@item.Source">@item.Source</a></small>
+                        <small><a href="https://wol.jw.org/de/wol/l/r10/lp-x?q=@item.Source" target="_blank">@item.Source</a></small>
+                        
                     }
                     else
                     {
@@ -118,6 +122,10 @@
         </div>
         @foreach (var item in Model.LifeParts)
         {
+            if (Model.IsServiceWeek && PartTypeStatics.CongregationStudy.IsBetween(item.TalkId ?? 0))
+            {
+                continue;
+            }
             var prt = Model.GetAssignmentToPart(item.Id);
             <div class="row mb-2">
                 <div class="@firtColClass">
@@ -152,13 +160,13 @@
     @foreach (var item in Model.OtherParts)
     {
         <div class="row mb-2">
-            <div class="@firtColClass"><span class="theme">@item.Theme</span> (@item.Time Min):
+            <div class="@firtColClass"><span class="theme">@item.Theme</span> (@item.Time Min)
                 <a asp-page="/Programs/EditSchedule" asp-route-id="@item.Id" class="btn btn-xs btn-outline-secondary">
                     <i class="bi bi-pencil" aria-hidden="true"></i>
                 </a>
             </div>
-            <div class="@colClass">@item.TalkId... @item.TalkMeeting @item.TalkMeetingSection
-
+            <div class="@colClass" data-info="@item.TalkId">
+                @Model.CircuitOverseer
             </div>
         </div>
     }

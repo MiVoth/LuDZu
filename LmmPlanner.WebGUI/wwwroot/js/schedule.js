@@ -2,7 +2,18 @@
     // const ifram = document.getElementById('ifram');
     // const lol = document.getElementById('lol');
     // ifram.body.innerHTML = lol.value;
-    document.getElementById('ifram').contentDocument.body.innerHTML = document.getElementById('lol').value;
+    // document.getElementById('ifram').contentDocument.body.innerHTML = document.getElementById('lol').value;
+
+    const btnExportS89 = document.querySelector('#btnExportS89');
+    if(btnExportS89 != null) {
+        btnExportS89.addEventListener('click', e => {
+            e.preventDefault();
+            const url = btnExportS89.href;
+            fetch(url, { method: 'GET' }).then(resp => resp.json()).then(data => {})
+            .catch(err => console.error(err.toString()));
+        })
+    }
+
     // register a-hrefs for detailed view/edit view
     function initPartDetails() {
         document.querySelectorAll('a[data-meeting-id]').forEach(a => {

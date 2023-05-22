@@ -1,9 +1,7 @@
 Hallo [*Vorname*],
-du wurdest für die Aufgabe "[*Art*]" am [*Datum*] in der Leben-und-Dienst-Zusammenkunft eingeteilt.
+am [*Datum*] du wurdest für die Aufgabe "[*Art*]" in der Leben-und-Dienst-Zusammenkunft eingeteilt.
 [*Partner*]
-Gib bitte gib kurz Rückmeldung, wenn du die Aufgabe erhalten hast und übernehmen kannst.
-
-Sollte etwas dazwischen kommen und [*DuPartner*] kann die Aufgabe später doch nicht durchführen, gib mir bitte Bescheid, damit ich für Ersatz sorgen kann. 😃
+Gib bitte kurz Bescheid, ob du die Aufgabe übernehmen kannst. Falls kurzfristig etwas dazwischen kommen sollte, meld dich einfach bei mir. 😃
 
 Danke für deine Mühe und Mitarbeit!
 Liebe Grüße und Jehovas Segen bei der Ausarbeitung,

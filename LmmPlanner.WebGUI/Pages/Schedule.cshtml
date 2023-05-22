@@ -37,7 +37,7 @@
             <a asp-page="/Schedule" asp-page-handler="ExportS89" asp-route-exportdate="@now" id="btnExportS89"
                 class="btn btn-secondary">
                 <i class="bi bi-repeat" aria-hidden="true"></i>
-                Export
+                Export S-21
             </a>
         </span>
     </div>
@@ -50,9 +50,9 @@
     <div id="details-part" class="col-md-6"></div>
 </div>
 @* srcdoc='@Html.Raw(Model.HtmlExport)'*@
-<input value="@Model.HtmlExport" id="lol" />
+@* <input value="@Model.HtmlExport" id="lol" />
 <iframe id="ifram" style="width:100%; height: 27cm;" srcdoc="<html><body>Hello, <b>world</b>.</body></html>">
-</iframe>
+</iframe> *@
 
 @section Scripts {
     <script src="~/js/schedule.js" asp-append-version="true"></script>

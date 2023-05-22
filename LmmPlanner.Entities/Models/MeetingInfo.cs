@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LmmPlanner.Entities.Enums;
 
 namespace LmmPlanner.Entities.Models
 {
@@ -28,6 +29,9 @@ namespace LmmPlanner.Entities.Models
         public IEnumerable<MeetingPartInfo> LifeParts { get => PartInfos.Where(d => d.LifePart); }
         public IEnumerable<MeetingPartInfo> OtherParts { get => PartInfos.Where(d => !d.TreasurePart && !d.ServicePart && !d.LifePart); }
         public string Alert { get; set; } = string.Empty;
+        public ExceptionVariant ExceptionVariant { get; set; } = ExceptionVariant.NoException;
+        public bool IsServiceWeek { get => ExceptionVariant == ExceptionVariant.ServiceWeek; }
+        public string? CircuitOverseer { get; set; }
 
         public MeetingAssignmentInfo GetAssignmentToPart(long scheduleId)
         {

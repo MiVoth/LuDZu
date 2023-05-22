@@ -18,7 +18,7 @@ namespace LmmPlanner.Data.Helper
                     typeName = "Gedächtnismahl";
                     break;
                 case 0:
-                    typeName = "Dienstwoche?";
+                    typeName = "Dienstwoche";
                     break;
                 case 5:
                     typeName = "Kreiskongress";
