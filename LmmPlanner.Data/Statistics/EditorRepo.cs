@@ -31,7 +31,7 @@ namespace LmmPlanner.Data.Statistics
         }
         public void Remove(LmmSchedule schedule)
         {
-            ctx.Remove(schedule); 
+            ctx.Remove(schedule);
         }
         public async Task<List<LmmAssignment>> GetLmmScheduleAssignments(long scheduleId)
         {
@@ -64,6 +64,32 @@ namespace LmmPlanner.Data.Statistics
         public async Task<Unavailable> GetUnavailability(long id)
         {
             return await ctx.Unavailables.FirstAsync(d => d.Id == id);
+        }
+
+        public async Task<bool> UnavailabilityExists(long id)
+        {
+            return await ctx.Unavailables.AnyAsync(d => d.Id == id);
+        }
+        public async Task<bool> InsertUnavailability(Unavailable unavailable)
+        {
+            unavailable.Id = ctx.Unavailables.Max(f => f.Id) + 1;
+            await ctx.AddAsync(unavailable);
+            return true;
+        }
+
+        public async Task<bool> DeleteUnavailability(long id)
+        {
+            Unavailable un = await ctx.Unavailables.FirstAsync(f => f.Id == id);
+            ctx.Remove(un);
+            try
+            {
+                await ctx.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 

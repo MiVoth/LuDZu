@@ -148,8 +148,13 @@
                         <td>@unavail.From</td>
                         <td>@unavail.To</td>
                         <td>
-                            <a asp-page="./EditUnavailable" asp-route-id="@unavail.Id" class="btn btn-sm btn-outline-primary">
+                            <a asp-page="./EditUnavailable" asp-route-id="@unavail.Id"
+                                asp-route-personId="@Model.ActivePerson.Id" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil" aria-hidden="true"></i>
+                            </a>
+                            <a asp-page="./DeleteUnavailable" asp-route-id="@unavail.Id"
+                                class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash" aria-hidden="true"></i>
                             </a>
                         </td>
                     </tr>
@@ -158,7 +163,7 @@
         </table>
     </div>
     <div class="card-footer">
-        <a asp-page="./CreateUnavailable" class="btn btn-outline-dark">
+        <a asp-page="./EditUnavailable" class="btn btn-outline-dark" asp-route-personId="@Model.ActivePerson.Id">
             <i class="bi bi-plus-circle" aria-hidden="true"></i>
             Neue Ausnahme
         </a>

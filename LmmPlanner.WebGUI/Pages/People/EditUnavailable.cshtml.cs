@@ -22,21 +22,50 @@ namespace LmmPlanner.WebGUI.Pages.People
         [BindProperty]
         public PersonNotAvailable ActiveEntity { get; set; }
 
-        public async Task OnGet(long id)
+        public async Task OnGet(long personId, long? id)
         {
-            Unavailable unavailable = await _editorRepo.GetUnavailability(id);
-            ActiveEntity = new() {
-                Id = unavailable.Id,
-                Active = unavailable.Active == true,
-                From = unavailable.StartDate,
-                To = unavailable.EndDate,
-                PersonId = unavailable.PersonId ?? 0
-            };
+            if (id != null)
+            {
+                Unavailable unavailable = await _editorRepo.GetUnavailability(id.Value);
+
+                ActiveEntity = new()
+                {
+                    Id = unavailable.Id,
+                    Active = unavailable.Active == true,
+                    From = unavailable.StartDate,
+                    To = unavailable.EndDate,
+                    PersonId = unavailable.PersonId ?? 0
+                };
+            }
+            else
+            {
+                ActiveEntity = new()
+                {
+                    // Id = ,
+                    Active = true,
+                    From = DateTime.Today,
+                    To = DateTime.Today,
+                    PersonId = personId
+                };
+            }
         }
 
         public async Task<IActionResult> OnPost(long id)
         {
-            Unavailable original = await _editorRepo.GetUnavailability(id);
+            Unavailable original = null!;
+            if (await _editorRepo.UnavailabilityExists(id))
+            {
+                original = await _editorRepo.GetUnavailability(id);
+
+            }
+            else
+            {
+                original = new()
+                {
+                    PersonId = ActiveEntity.PersonId,
+                };
+                await _editorRepo.InsertUnavailability(original);
+             }
             if (ActiveEntity == null)
             {
                 throw new System.Exception("No!");
@@ -45,7 +74,7 @@ namespace LmmPlanner.WebGUI.Pages.People
             original.StartDate = ActiveEntity.From;
             original.EndDate = ActiveEntity.To;
             await _editorRepo.CommitChanges();
-            return RedirectToPage("./Index", new { id = original.PersonId });
+            return RedirectToPage("./PublisherDetails", new { id = original.PersonId });
         }
         // public async Task<IActionResult> OnPostDelete(long id)
         // {

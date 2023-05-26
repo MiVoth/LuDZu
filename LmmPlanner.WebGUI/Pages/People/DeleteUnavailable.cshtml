@@ -1,5 +1,6 @@
-@page "{personId:long}/{id:long?}"
-@model EditUnavailableModel
+@page
+
+@model DeleteUnavailableModel
 @{
     ViewData["Title"] = "Bearbeiten";
 }
@@ -27,9 +28,9 @@
     </div>
     <hr/>
     <p>
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save" aria-hidden="true"></i>
-            Speichern
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash" aria-hidden="true"></i>
+            Löschen
         </button>
     </p>
 </form>
