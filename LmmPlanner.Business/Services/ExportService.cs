@@ -27,7 +27,7 @@ namespace LmmPlanner.Business.Services
 
             using var browserFetcher = new BrowserFetcher();
             await browserFetcher.DownloadAsync();
-            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true});
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
             // , Args = new[] {
             //     // "--font-render-hinting=none'",
             //     "--force-color-profile=srgb"
@@ -38,11 +38,13 @@ namespace LmmPlanner.Business.Services
             // await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
 
             // await using var page = await browser.NewPageAsync();
-            string html =  await ExportAsync(start, end);
+            string html = await ExportAsync(start, end);
             await page.SetContentAsync(html);
             await page.GetContentAsync();
-            return await page.PdfDataAsync(new PdfOptions {
+            return await page.PdfDataAsync(new PdfOptions
+            {
                 PrintBackground = true,
+                // HeaderTemplate = "<p>Hallo<p>",
                 Format = PuppeteerSharp.Media.PaperFormat.A4
             });
             // var result = await page.GetContentAsync();
@@ -84,7 +86,7 @@ namespace LmmPlanner.Business.Services
                 schedList.Add(exp);
                 newDate = newDate.AddDays(7);
             }
-            
+
             string color = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",")[start.Month];
             // var color2 = ((await _settingsRepo.GetSetting(60))?.Value ?? "").Split(",");
             int RGBint = Convert.ToInt32(color.Replace("#", ""), 16);
@@ -126,29 +128,49 @@ namespace LmmPlanner.Business.Services
             Func<long, DateTime> abc = f => { var mt = meetingTime.AddMinutes(i); i += f; return mt; };
             IEnumerable<TreasureExport> treasureParts = Meeting.TreasureParts.OrderBy(f => f.RowOrder).Select(f => new TreasureExport
             {
-                TreasureTime = $"{abc(f.Time ?? 0):HH:mm}", // f.Time,
+                TreasureTime = "", // $"{abc(f.Time ?? 0):HH:mm}", // f.Time,
                 TreasureTheme = f.Theme,
+                TreasureLength = f.Time ?? 0,
                 TreasureMain = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.MainPerson,
                 TreasureAssist = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.AssistantPerson
-            });
+            }).ToList();
+            DateTime m2 = meetingTime;
+            foreach (var item in treasureParts)
+            {
+                item.TreasureTime = $"{m2:HH:mm}";
+                m2 = m2.AddMinutes(item.TreasureLength);
+            }
 
+            m2 = m2.AddMinutes(2);
             var serviceParts = Meeting.ServiceParts.OrderBy(f => f.RowOrder).Select(f => new ServiceExport
             {
                 AssignTime = $"{abc(1 + f.Time ?? 0):HH:mm}",
                 AssignTheme = f.Theme,
+                AssignLength = f.Time ?? 0,
                 AssignMain = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.MainPerson,
                 AssignAssist = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.AssistantPerson
-            });
+            }).ToList();
+            foreach (var item in serviceParts)
+            {
+                item.AssignTime = $"{m2:HH:mm}";
+                m2 = m2.AddMinutes(item.AssignLength + 1);
+            }
 
-            i += 5;
+            m2 = m2.AddMinutes(5);
+            // i += 5;
             var lifeParts = Meeting.LifeParts.OrderBy(f => f.RowOrder).Select(f => new LifeExport
             {
                 LifeTime = $"{abc(f.Time ?? 0):HH:mm}",
-                LifeTime2 = f.Time,
+                LifeTime2 = f.Time ?? 0,
                 LifeTheme = f.Theme,
                 LifeMain = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.MainPerson,
                 LifeAssist = Meeting.AssignmentInfos.FirstOrDefault(m => m.ScheduleId == f.Id)?.AssistantPerson
-            });
+            }).ToList();
+            foreach (var item in lifeParts)
+            {
+                item.LifeTime = $"{m2:HH:mm}";
+                m2 = m2.AddMinutes(item.LifeTime2);
+            }
 
             // var lst = lifeParts.Last();
             return new ScheduleExport
@@ -157,8 +179,8 @@ namespace LmmPlanner.Business.Services
                 MwbNo = Meeting.MeetingDate?.Month,
                 Song1Starttime = $"{meetingTimeBase:HH:mm}",
                 BeginningTime = $"{meetingTimeBase.AddMinutes(5):HH:mm}",
-                ConclusionTime = $"{meetingTimeBase.AddMinutes(i):HH:mm}",
-                EndTime = $"{meetingTimeBase.AddMinutes(i + 3):HH:mm}",
+                ConclusionTime = $"{m2:HH:mm}",
+                EndTime = $"{m2.AddMinutes(3):HH:mm}",
                 // LmmTalkTime = $"{meetingTime.AddMinutes(6):HH:mm}",
                 SongBeginning = Meeting.SongBeginning,
                 PrayerBeginning = Meeting.PrayerBeginning,
@@ -181,7 +203,7 @@ namespace LmmPlanner.Business.Services
                 ServiceExport = serviceParts,
                 TreasureExport = treasureParts,
                 Alert = Meeting.Alert,
-                ShowSchedule =  Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.NoException ||  Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.ServiceWeek
+                ShowSchedule = Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.NoException || Meeting.ExceptionVariant == Entities.Enums.ExceptionVariant.ServiceWeek
             };
         }
     }

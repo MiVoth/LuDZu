@@ -63,12 +63,12 @@
 <body>
 	<main>
 		<!--<p>!REPEAT_START!</p>-->
-		<section id="header">
+		<section id="header" data-replace="ScheduleHeader">
 			<h1 data-replace="CongregationTitle">!CONGREGATION_TITLE!</h1>
 			<hr>
 			<h2 data-replace="MeetingName">!TITLE!</h2>
 		</section>
-		<div id="week" data-replace="WeekSched">
+		<div class="week" data-replace="WeekSched" class="break-"*Index*"">
 			<div id="other">
 				<table class="top-table">
 					<tr data-info="#IF !MWB_NO!#">
@@ -104,7 +104,7 @@
 						<td>
 							<!--<p class="name">!LM_CHAIRMAN! <span class="info">(!CHAIRMAN!)</span>#IF !COUNSELOR_A1!#<span class="name"> / !COUNSELOR_A1! <span class="info">(!COUNSELOR! !AUX_SHORT!1)</span></span>#IF !COUNSELOR_A2!#<span class="name"> / !COUNSELOR_A2!
 									<span class="info">(!COUNSELOR! !AUX_SHORT!2)</span></span></p>#ENDIF##ENDIF#-->
-							<p class="name"><span data-replace="ChairPerson">!LM_CHAIRMAN!</span> (<span class="info" data-replace="ChairName">(!CHAIRMAN!)</span>)</p>
+							<p class="name"><span data-replace="ChairPerson">!LM_CHAIRMAN!</span> <span class="info">(<span data-replace="ChairName">(!CHAIRMAN!)</span>)</span></p>
 						</td>
 					</tr>
 					<!--Opening Comments-->
@@ -254,8 +254,8 @@
 							<p class="theme" data-replace="LifeTheme">!CL1_THEME!</p>
 						</td>
 						<td>
-							<p class="name" data-replace="LifeMain">!CL1_SPEAKER! <span class="info" data-hide="LifeAssist">(<span data-replace="LeaderName"></span>)</span></p>
-							<p class="name" data-show="LifeAssist"><span data-replace="LifeAssist">!CBS_READER!<span> (<span class="info" data-replace="ReaderName">(!READER!)</span>)</p>
+							<p class="name"><span data-replace="LifeMain">!CL1_SPEAKER!</span> <span class="info" data-show="LifeAssist">(<span data-replace="LeaderName"></span>)</span></p>
+							<p class="name" data-show="LifeAssist"><span data-replace="LifeAssist">!CBS_READER!</span> <span class="info">(<span data-replace="ReaderName">(!READER!)</span>)</span></p>
 						</td>
 					</tr>
 					
@@ -312,6 +312,7 @@
 					</tr>
 				</table>
 			</div>
+			<!-- <div  class="break-**Index**" data-replace="Index"></div> -->
 		</div>
 			<!--<p>#ENDIF#</p>-->
 		</div>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using LmmPlanner.Entities.Interfaces;
 using LmmPlanner.Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,13 @@ namespace LmmPlanner.Data;
 
 public class DataRepo : IDataRepo
 {
+    private IMapper _mapper;
     private MyContext ctx;
 
-    public DataRepo(MyContext context)
+    public DataRepo(MyContext context,
+        IMapper mapper)
     {
+        _mapper = mapper;
         ctx = context;
     }
     byte[] isTrue() => new byte[1] { (byte)48 };
@@ -36,8 +40,24 @@ public class DataRepo : IDataRepo
         List<long> unavail = await ctx.Unavailables.Where(d =>
         ((d.StartDate <= date && d.EndDate >= date)
         || (d.StartDate > dateStart && d.EndDate < dateEnd))
-        && personids.Contains(d.PersonId)).Select(d => d.PersonId ?? 0).ToListAsync();
+        && personids.Contains(d.PersonId)).Select(d => d.PersonId).ToListAsync();
         return persons.Where(p => !unavail.Contains(p.Id)).ToList();
+    }
+    public async Task<List<LmmPersonExtented>> GetAllPersonsWithUnavailable()
+    {
+        var persons = await GetAllPersons();
+        var personIds = persons.Select(f => f.Id).ToList();
+
+        var unav = await ctx.Unavailables.Where(u => personIds.Contains(u.PersonId)).ToListAsync();
+        var ext = new List<LmmPersonExtented>();
+        foreach (var person in persons)
+        {
+            var extPerson = _mapper.Map<LmmPersonExtented>(person);
+            extPerson.NotAvailableAt = _mapper.ProjectTo<UnavailableInfo>(unav.Where(p => p.PersonId == extPerson.Id).AsQueryable()).ToList();
+            ext.Add(extPerson);
+            
+        }
+        return ext;
     }
     public async Task<List<LmmPerson>> GetAllPersons()
     {
@@ -118,7 +138,7 @@ public class DataRepo : IDataRepo
         .Select(p => new PersonNotAvailable
         {
             Id = p.Id,
-            PersonId = p.PersonId ?? personId,
+            PersonId = p.PersonId,
             From = p.StartDate,
             To = p.EndDate,
             Active = p.Active == true

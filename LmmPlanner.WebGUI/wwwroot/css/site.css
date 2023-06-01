@@ -87,3 +87,7 @@ h2 i:before {
   width: 100%;
   height: 1500px;
 }
+
+.bg-danger-light {
+  background-color: #dc354644 !important;
+}

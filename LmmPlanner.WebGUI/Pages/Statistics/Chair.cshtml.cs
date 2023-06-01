@@ -60,7 +60,7 @@ namespace LmmPlanner.WebGUI.Pages.Statistics
         public async Task<IActionResult> OnGetAll(DateTime fromDate, DateTime toDate)
         {
 
-            var persons = await _dataRepo.GetAllPersons();
+            var persons = await _dataRepo.GetAllPersonsWithUnavailable();
             persons = persons.Where(p => p.IsServant)
                 .OrderBy(p => p.Lastname).ThenBy(p => p.Firstname).ToList();
             var part1 = await _chairRepo.GetCompleteOverview(fromDate, toDate, persons.Select(d => (long?)d.Id).ToList());

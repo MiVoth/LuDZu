@@ -4,6 +4,22 @@ using System.Linq;
 
 namespace LmmPlanner.Entities.Models
 {
+    public class UnavailableInfo
+    {
+        public long Id { get; set; }
+        public long? PersonId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public bool? Active { get; set; }
+    }
+    public class LmmPersonExtented : LmmPerson
+    {
+        public List<UnavailableInfo> NotAvailableAt { get; set; } = new();
+        public bool IsNotAvailable(AssignmentOverviewMeeting meeting) {
+            DateTime date = meeting.Date;
+            return NotAvailableAt.Any(n => date >= n.StartDate && date<= n.EndDate); 
+        } 
+    }
     public class LmmPerson
     {
         public long Id { get; set; }

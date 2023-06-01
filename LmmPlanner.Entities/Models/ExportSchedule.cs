@@ -42,7 +42,7 @@ namespace LmmPlanner.Entities.Models
     public class LifeExport
     {
         public string? LifeTime { get; set; }
-        public long? LifeTime2 { get; set; }
+        public long LifeTime2 { get; set; }
         public string? LifeTheme { get; set; }
         public string? LifeMain { get; set; }
         public string? LifeAssist { get; set; }
@@ -53,6 +53,7 @@ namespace LmmPlanner.Entities.Models
         public string? TreasureTheme { get; set; }
         public string? TreasureMain { get; set; }
         public string? TreasureAssist { get; set; }
+        public long TreasureLength { get; set; }
     }
     public class ServiceExport
     {
@@ -60,5 +61,6 @@ namespace LmmPlanner.Entities.Models
         public string? AssignTheme { get; set; }
         public string? AssignMain { get; set; }
         public string? AssignAssist { get; set; }
+        public long AssignLength { get; set; }
     }
 }

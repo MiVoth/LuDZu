@@ -7,14 +7,18 @@ using LmmPlanner.Data.Helper;
 using Microsoft.EntityFrameworkCore;
 using LmmPlanner.Entities.Interfaces;
 using LmmPlanner.Entities.Enums;
+using AutoMapper;
 
 namespace LmmPlanner.Data
 {
     public class ScheduleRepo : IScheduleRepo
     {
+        private IMapper _mapper;
         private MyContext db;
-        public ScheduleRepo(MyContext context)
+        public ScheduleRepo(MyContext context,
+        IMapper mapper)
         {
+            _mapper = mapper;
             db = context;
         }
 
@@ -106,7 +110,7 @@ namespace LmmPlanner.Data
                 Assist = assist,
                 PartInfo = MeetingPartInfo.GetPartType(sched.TalkId)
             };
-            List<LmmPerson> persons = await new DataRepo(db).GetAllPersonsForDate(sched.Date ?? DateTime.Now);
+            List<LmmPerson> persons = await new DataRepo(db, _mapper).GetAllPersonsForDate(sched.Date);
 
             List<LmmPerson> partner = persons.Where(d => d.IsPartner).ToList();
             bool addPartner = false;

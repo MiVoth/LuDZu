@@ -9,6 +9,7 @@ public interface IDataRepo
 {
     Task<List<LmmAssignmentInfo>> GetAllAssignmentsOfPerson(long personId);
     Task<List<LmmPerson>> GetAllPersons();
+    Task<List<LmmPersonExtented>> GetAllPersonsWithUnavailable();
     Task<List<LmmPerson>> GetAllPersonsForDate(DateTime date);
     Task<LmmPerson> GetPerson(long personId);
 

@@ -28,9 +28,13 @@
                 <td>@person.Name</td>
                 @foreach (var meeting in Model.Meetings)
                 {
+                    string bg = person.IsNotAvailable(meeting) ? "bg-danger-light" : "";
+                    @* if(person.IsNotAvailable(meeting)) {
+                        <td><div class="text-danger">--</div></td>
+                    } else *@
                     if (meeting.Schedules.Any(d => d.PersonId == person.Id || d.AssistantId == person.Id))
                     {
-                        <td>
+                        <td class="@bg">
                             @foreach (var sched in meeting.Schedules.Where(d => d.PersonId == person.Id || d.AssistantId == person.Id))
                             {
                                 if(sched.PersonId == person.Id) 
@@ -53,7 +57,7 @@
                     }
                     else
                     {
-                        <td>&nbsp;</td>
+                        <td class="@bg">&nbsp;</td>
                     }
                 }
             </tr>

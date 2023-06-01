@@ -26,7 +26,7 @@ namespace LmmPlanner.Entities.Models
         public List<MeetingAssignmentInfo> AssignmentInfos { get; set; } = new();
         public IEnumerable<MeetingPartInfo> TreasureParts { get => PartInfos.Where(d => d.TreasurePart); }
         public IEnumerable<MeetingPartInfo> ServiceParts { get => PartInfos.Where(d => d.ServicePart); }
-        public IEnumerable<MeetingPartInfo> LifeParts { get => PartInfos.Where(d => d.LifePart); }
+        public IEnumerable<MeetingPartInfo> LifeParts { get => PartInfos.OrderBy(d => d.RowOrder).ThenBy(d => d.TalkId).Where(d => d.LifePart); }
         public IEnumerable<MeetingPartInfo> OtherParts { get => PartInfos.Where(d => !d.TreasurePart && !d.ServicePart && !d.LifePart); }
         public string Alert { get; set; } = string.Empty;
         public ExceptionVariant ExceptionVariant { get; set; } = ExceptionVariant.NoException;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using LmmPlanner.Data.Statistics;
 using LmmPlanner.Data.TheocData;
 using LmmPlanner.Entities.Interfaces;
+using LmmPlanner.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,24 +20,33 @@ namespace LmmPlanner.WebGUI.Pages.Programs
         }
 
         [BindProperty]
-        public LmmSchedule ActiveSchedule { get; set; }
+        public EditScheduleDto ActiveSchedule { get; set; }
 
         public async Task OnGet(long id)
         {
-            ActiveSchedule = await _editorRepo.GetLmmSchedule(id);
+            ActiveSchedule = await _editorRepo.GetLmmScheduleDto(id);
         }
 
         public async Task<IActionResult> OnPost(long id)
         {
-            var original = await _editorRepo.GetLmmSchedule(id);
-            if (ActiveSchedule == null)
+            TaskResult tr = await _editorRepo.UpdateLmmSchedule(ActiveSchedule);
+            // var original = await _editorRepo.GetLmmSchedule(id);
+            // if (ActiveSchedule == null)
+            // {
+            //     throw new System.Exception("No!");
+            // }
+            // original.Theme = ActiveSchedule.Theme;
+            // original.Time = ActiveSchedule.Time;
+            // original.Active = ActiveSchedule.Active;
+            // original.Roworder = ActiveSchedule.Roworder;
+            // original.Date = ActiveSchedule.Date;
+            // await _editorRepo.CommitChanges();
+            if (tr.Success)
             {
-                throw new System.Exception("No!");
+                return RedirectToPage("/Schedule", new { date = ActiveSchedule.Date.ToString("yyyy-MM-dd") });
             }
-            original.Theme = ActiveSchedule.Theme;
-            original.Time = ActiveSchedule.Time;
-            await _editorRepo.CommitChanges();
-            return RedirectToPage("/Schedule", new { date = original.Date?.ToString("yyyy-MM-dd") });
+            ModelState.AddModelError("", tr.Error);
+            return Page();
         }
         public async Task<IActionResult> OnPostDelete(long id)
         {
@@ -47,29 +57,32 @@ namespace LmmPlanner.WebGUI.Pages.Programs
             }
             _editorRepo.Remove(original);
             await _editorRepo.CommitChanges();
-            return RedirectToPage("/Schedule", new { date = original.Date?.ToString("yyyy-MM-dd") });
+            return RedirectToPage("/Schedule", new { date = original.Date.ToString("yyyy-MM-dd") });
         }
 
         public async Task<JsonResult> OnPostAssignee(long partId, long? assignmentId, long assigneeId, bool assist)
         {
+            bool success = false;
             if (assignmentId == null || assignmentId == 0)
             {
-                var original = await _editorRepo.GetLmmSchedule(partId);
-                var assignments = await _editorRepo.GetLmmScheduleAssignments(partId);
-                if (assignments.Count == 0)
-                {
-                    var assignment = new LmmAssignment
-                    {
-                        Id = await _editorRepo.NextAssignmentId(),
-                        AssigneeId = assigneeId,
-                        Classnumber = 1,
-                        Date = original.Date, //?.AddDays(4),
-                        LmmScheduleId = partId,
-                        TimeStamp = DateTime.Now.ToFileTimeUtc(),
-                        Uuid = $"{Guid.NewGuid()}"
-                    };
-                    await _editorRepo.AddAssignment(assignment);
-                }
+                TaskResult tr = await _editorRepo.SaveLmmAssignment(partId, assigneeId);
+                success = tr.Success;
+                // var original = await _editorRepo.GetLmmSchedule(partId);
+                // var assignments = await _editorRepo.GetLmmScheduleAssignments(partId);
+                // if (assignments.Count == 0)
+                // {
+                //     var assignment = new LmmAssignment
+                //     {
+                //         Id = await _editorRepo.NextAssignmentId(),
+                //         AssigneeId = assigneeId,
+                //         Classnumber = 1,
+                //         Date = original.Date, //?.AddDays(4),
+                //         LmmScheduleId = partId,
+                //         TimeStamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
+                //         Uuid = $"{Guid.NewGuid()}"
+                //     };
+                //     await _editorRepo.AddAssignment(assignment);
+                // }
             }
             else
             {
@@ -83,8 +96,8 @@ namespace LmmPlanner.WebGUI.Pages.Programs
                     // original.VolunteerId = assigneeId;
                     original.AssistantId = assigneeId;
                 }
+                success = await _editorRepo.CommitChanges();
             }
-            bool success = await _editorRepo.CommitChanges();
             return new JsonResult(new
             {
                 Success = success

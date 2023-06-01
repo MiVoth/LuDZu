@@ -57,8 +57,9 @@
                     </a>
                     @if (PartTypeStatics.BibleReading.IsBetween(item.TalkId ?? 0))
                     {
-                        <small><a href="https://wol.jw.org/de/wol/l/r10/lp-x?q=@item.Source" target="_blank">@item.Source</a></small>
-                        
+                        <small><a href="https://wol.jw.org/de/wol/l/r10/lp-x?q=@item.Source"
+                                target="_blank">@item.Source</a></small>
+
                     }
                     else
                     {
@@ -180,4 +181,11 @@
         <div class="@firtColClass"><span class="theme">Lied @Model.SongEnd und Gebet</span></div>
         <div class="@colClass">@Model.PrayerEnd</div>
     </div>
+    @{
+        string md = $"{Model.MeetingDate?.ToString("yyyy-MM-dd")}";
+    }
+    <a asp-page="/Programs/AddSchedule" asp-route-meetingDate="@md" class="btn btn-secondary">
+        <i class="bi bi-plus-circle-dotted" aria-hidden="t"></i>
+        Programmpunkt hinzufügen
+    </a>
 </div>

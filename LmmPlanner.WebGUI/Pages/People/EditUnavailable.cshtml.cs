@@ -34,7 +34,7 @@ namespace LmmPlanner.WebGUI.Pages.People
                     Active = unavailable.Active == true,
                     From = unavailable.StartDate,
                     To = unavailable.EndDate,
-                    PersonId = unavailable.PersonId ?? 0
+                    PersonId = unavailable.PersonId
                 };
             }
             else
@@ -52,29 +52,32 @@ namespace LmmPlanner.WebGUI.Pages.People
 
         public async Task<IActionResult> OnPost(long id)
         {
-            Unavailable original = null!;
+            TaskResult tr = new();
+            // Unavailable original = null!;
             if (await _editorRepo.UnavailabilityExists(id))
             {
-                original = await _editorRepo.GetUnavailability(id);
-
+                // original = await _editorRepo.GetUnavailability(id);
+                tr = await _editorRepo.UpdateUnavailability(ActiveEntity);
             }
             else
             {
-                original = new()
-                {
-                    PersonId = ActiveEntity.PersonId,
-                };
-                await _editorRepo.InsertUnavailability(original);
-             }
-            if (ActiveEntity == null)
-            {
-                throw new System.Exception("No!");
+                tr = await _editorRepo.SaveUnavailability(ActiveEntity);
+                // await _editorRepo.SaveUnavailability(original);
             }
-            original.Active = ActiveEntity.Active;
-            original.StartDate = ActiveEntity.From;
-            original.EndDate = ActiveEntity.To;
-            await _editorRepo.CommitChanges();
-            return RedirectToPage("./PublisherDetails", new { id = original.PersonId });
+            // if (ActiveEntity == null)
+            // {
+            //     throw new System.Exception("No!");
+            // }
+            // original.Active = ActiveEntity.Active;
+            // original.StartDate = ActiveEntity.From;
+            // original.EndDate = ActiveEntity.To;
+            // await _editorRepo.CommitChanges();
+            if (tr.Success)
+            {
+                return RedirectToPage("./PublisherDetails", new { personId = ActiveEntity.PersonId });
+            }
+            ModelState.AddModelError("", tr.Error);
+            return Page();
         }
         // public async Task<IActionResult> OnPostDelete(long id)
         // {

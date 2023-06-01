@@ -31,7 +31,7 @@ public class DeleteUnavailableModel : PageModel
             Active = unavailable.Active == true,
             From = unavailable.StartDate,
             To = unavailable.EndDate,
-            PersonId = unavailable.PersonId ?? 0
+            PersonId = unavailable.PersonId
         };
     }
 
