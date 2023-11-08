@@ -120,6 +120,12 @@ namespace LmmPlanner.Data.Statistics
             return id + 1;
         }
 
+        public async Task<long> NextUnavailableId()
+        {
+            long id = await ctx.Set<Unavailable>().MaxAsync(d => d.Id);
+            return id + 1;
+        }
+
         public async Task<Unavailable> GetUnavailability(long id)
         {
             return await ctx.Unavailables.FirstAsync(d => d.Id == id);
@@ -148,7 +154,7 @@ namespace LmmPlanner.Data.Statistics
         {
             UnavailableWrite un = new()
             {
-                Id = await NextAssignmentId(),
+                Id = await NextUnavailableId(),
                 Active = true,
                 PersonId = unavailable.PersonId,
                 StartDate = $"{unavailable.From?.ToString("yyyy-MM-dd")}",

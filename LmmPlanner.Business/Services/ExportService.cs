@@ -94,10 +94,11 @@ namespace LmmPlanner.Business.Services
             byte Green = (byte)((RGBint >> 8) & 255);
             byte Blue = (byte)(RGBint & 255);
 
+            Congregation cong = await _settingsRepo.GetCongregation();
             string html = rpl.GetText(new
             {
                 // CongregationTitle = "Leben und Dienst Zusammenkunft",
-                CongregationTitle = "Versammlung Schongau",
+                CongregationTitle = $"Versammlung {cong.Name}",
                 MeetingName = "Zusammenkunft unter der Woche",
                 MWB_COLOR = $"rgb({Red},{Green},{Blue})",
                 MWB_COLOR_LIGHT = $"rgb({Red},{Green},{Blue}, .3)",
@@ -156,7 +157,7 @@ namespace LmmPlanner.Business.Services
                 m2 = m2.AddMinutes(item.AssignLength + 1);
             }
 
-            m2 = m2.AddMinutes(5);
+            m2 = m2.AddMinutes(4);
             // i += 5;
             var lifeParts = Meeting.LifeParts.OrderBy(f => f.RowOrder).Select(f => new LifeExport
             {
