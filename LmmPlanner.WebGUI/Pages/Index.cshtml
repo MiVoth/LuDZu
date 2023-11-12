@@ -5,8 +5,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Zum Plan</h1>
-    <a asp-page="/Schedule">Hier</a>
+    <h1 class="display-4">LuDZ-Viewer</h1>
 </div>
 
 <div>
@@ -15,23 +14,24 @@
     </h2>
     <a asp-page="/People/Index" class="btn btn-outline-dark">
         <i class="bi bi-people" aria-hidden="true"></i>
-        Verkündiger
+        Verkündigerübersicht
     </a>
-    <a asp-page="/Schedule" class="btn btn-outline-dark">
+    <a asp-page="/Schedule" class="btn btn-outline-primary">
+        <i class="bi bi-calendar" aria-hidden="true"></i>
         Programm
     </a>
     <a asp-page="/Export/Plan" class="btn btn-outline-dark">
-        <i class="bi bi-calendar" aria-hidden="true"></i>
-        Pläne
+        <i class="bi bi-file-pdf" aria-hidden="true"></i>
+        Pläne als PDF exportieren
     </a>
     <a asp-page="/Config/Settings" class="btn btn-outline-info">
         Einstellungen
     </a>
     <hr />
 
-    <h2>Statistiken</h2>
+    <h2>Statistiken / Listen</h2>
     <hr>
     <a asp-page="/Statistics/Chair" class="btn btn-secondary">
-        LuDZ-Vorsitz
+        Gesamtübersicht / LuDZ-Vorsitz / ...
     </a>
 </div>
